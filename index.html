@@ -1,0 +1,2169 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tbilissimo — Корпоративная Мафия</title>
+<meta name="description" content="Профессиональный тимбилдинг на основе корпоративной Мафии: онлайн и оффлайн по всем крупным русскоязычным городам. Опыт 10+ лет.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300&display=swap" rel="stylesheet">
+<style>
+/* ════════════════════════════════════════════════
+   ROOT & RESET
+════════════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg-deep:       #0a0a0a;
+  --bg-card:       #131313;
+  --bg-surface:    #1a1a1a;
+  --bg-hover:      #1f1f1f;
+  --text-primary:  #e8e8e8;
+  --text-secondary:#7a7a7a;
+  --text-muted:    #3d3d3d;
+  --accent:        #f7931e;
+  --accent-light:  #ffaa47;
+  --accent-dim:    rgba(247,147,30,0.12);
+  --accent-border: rgba(247,147,30,0.5);
+  --line:          rgba(255,255,255,0.06);
+  --line-bright:   rgba(255,255,255,0.12);
+  --radius:        2px;
+  --transition:    0.25s cubic-bezier(0.4,0,0.2,1);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg-deep);
+  font-family: 'Montserrat', sans-serif;
+  color: var(--text-primary);
+  overflow-x: hidden;
+  cursor: default;
+}
+
+/* ── Grain overlay on body ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 300 300' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.6;
+}
+
+/* ── Custom cursor ── */
+body { cursor: none; }
+#cursor {
+  position: fixed;
+  width: 8px; height: 8px;
+  background: var(--accent);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 10000;
+  transform: translate(-50%,-50%);
+  transition: width 0.2s, height 0.2s, opacity 0.2s;
+  mix-blend-mode: normal;
+}
+#cursor-ring {
+  position: fixed;
+  width: 32px; height: 32px;
+  border: 1px solid rgba(247,147,30,0.4);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%,-50%);
+  transition: transform 0.1s, width 0.3s, height 0.3s, border-color 0.3s;
+}
+body:has(a:hover) #cursor, body:has(button:hover) #cursor { width: 14px; height: 14px; }
+body:has(a:hover) #cursor-ring, body:has(button:hover) #cursor-ring {
+  width: 48px; height: 48px;
+  border-color: rgba(247,147,30,0.7);
+}
+input, textarea, select { cursor: text; }
+
+a, button { cursor: none; }
+
+/* ════════════════════════════════════════════════
+   NAV
+════════════════════════════════════════════════ */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 60px;
+  border-bottom: 1px solid var(--line);
+  background: rgba(10,10,10,0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.nav-logo {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 4px;
+  color: var(--accent);
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+.nav-links {
+  display: flex;
+  gap: 36px;
+  list-style: none;
+}
+
+.nav-links a {
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  text-transform: uppercase;
+  font-weight: 500;
+  transition: color var(--transition);
+  position: relative;
+}
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px; left: 0; right: 0;
+  height: 1px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transition: transform var(--transition);
+}
+.nav-links a:hover { color: var(--text-primary); }
+.nav-links a:hover::after { transform: scaleX(1); }
+
+.nav-cta {
+  font-size: 10px;
+  letter-spacing: 2px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--bg-deep);
+  background: var(--accent);
+  border: none;
+  padding: 10px 24px;
+  text-decoration: none;
+  transition: background var(--transition), transform var(--transition);
+  display: inline-block;
+}
+.nav-cta:hover { background: var(--accent-light); transform: translateY(-1px); }
+
+/* ════════════════════════════════════════════════
+   HERO
+════════════════════════════════════════════════ */
+#hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 64px 60px 80px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* animated grid lines */
+#hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+  background-size: 80px 80px;
+  pointer-events: none;
+}
+
+.hero-eyebrow {
+  font-size: 10px;
+  letter-spacing: 4px;
+  color: var(--accent);
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  opacity: 0;
+  animation: fadeUp 0.8s 0.2s forwards;
+}
+.hero-eyebrow::before {
+  content: '';
+  display: inline-block;
+  width: 32px; height: 1px;
+  background: var(--accent);
+}
+
+.hero-h1 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(48px, 12vw, 140px);
+  line-height: 0.88;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  max-width: 800px;
+  opacity: 0;
+  animation: fadeUp 0.8s 0.35s forwards;
+}
+.hero-h1 .accent { color: var(--accent); }
+
+.hero-sub {
+  margin-top: 32px;
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--text-secondary);
+  max-width: 520px;
+  line-height: 1.7;
+  letter-spacing: 0.5px;
+  opacity: 0;
+  animation: fadeUp 0.8s 0.5s forwards;
+}
+
+.hero-actions {
+  margin-top: 48px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  opacity: 0;
+  animation: fadeUp 0.8s 0.65s forwards;
+}
+
+.btn-primary {
+  font-size: 11px;
+  letter-spacing: 2.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--bg-deep);
+  background: var(--accent);
+  border: none;
+  padding: 16px 36px;
+  text-decoration: none;
+  display: inline-block;
+  transition: background var(--transition), transform var(--transition), box-shadow var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity var(--transition);
+}
+.btn-primary:hover { background: var(--accent-light); transform: translateY(-2px); box-shadow: 0 12px 40px rgba(247,147,30,0.3); }
+.btn-primary:hover::before { opacity: 1; }
+
+.btn-secondary {
+  font-size: 11px;
+  letter-spacing: 2px;
+  font-weight: 500;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  text-decoration: none;
+  border-bottom: 1px solid var(--text-muted);
+  padding-bottom: 2px;
+  transition: color var(--transition), border-color var(--transition);
+}
+.btn-secondary:hover { color: var(--text-primary); border-color: var(--text-primary); }
+
+.hero-stats {
+  position: absolute;
+  right: 60px;
+  bottom: 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.h-stat {
+  border-top: 1px solid var(--accent-border);
+  padding-top: 12px;
+  min-width: 120px;
+  opacity: 0;
+  animation: fadeLeft 0.6s forwards;
+}
+.h-stat:nth-child(1) { animation-delay: 0.7s; }
+.h-stat:nth-child(2) { animation-delay: 0.85s; }
+.h-stat:nth-child(3) { animation-delay: 1s; }
+.h-stat .n {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 38px;
+  color: var(--accent);
+  line-height: 1;
+}
+.h-stat .l {
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+.hero-vline {
+  position: absolute;
+  right: 220px;
+  top: 0; bottom: 0;
+  width: 1px;
+  background: var(--line);
+}
+
+.scroll-hint {
+  position: absolute;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  opacity: 0;
+  animation: fadeUp 1s 1.2s forwards;
+}
+.scroll-hint span {
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+.scroll-line {
+  width: 1px;
+  height: 48px;
+  background: linear-gradient(to bottom, var(--accent), transparent);
+  animation: scrollPulse 2s infinite;
+}
+
+@keyframes scrollPulse {
+  0%, 100% { opacity: 0.3; transform: scaleY(1); }
+  50% { opacity: 1; transform: scaleY(1.2); }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeLeft {
+  from { opacity: 0; transform: translateX(16px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+/* ════════════════════════════════════════════════
+   SECTION COMMONS
+════════════════════════════════════════════════ */
+section { padding: 120px 60px; position: relative; }
+section + section { border-top: 1px solid var(--line); }
+#games { border-top: none !important; }
+
+
+.sec-label {
+  font-size: 10px;
+  letter-spacing: 4px;
+  color: var(--accent);
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.sec-label::before {
+  content: '';
+  display: inline-block;
+  width: 24px; height: 1px;
+  background: var(--accent);
+}
+
+.sec-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(44px, 5vw, 72px);
+  letter-spacing: 2px;
+  line-height: 1;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+}
+
+.sec-sub {
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--text-secondary);
+  max-width: 560px;
+  line-height: 1.7;
+}
+
+.sec-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 180px;
+  color: rgba(255,255,255,0.025);
+  line-height: 1;
+  position: absolute;
+  right: 60px;
+  top: 80px;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* ════════════════════════════════════════════════
+   GAMES SECTION
+════════════════════════════════════════════════ */
+#games { background: var(--bg-deep); }
+
+.games-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  margin-top: 64px;
+}
+
+.game-card {
+  background: var(--bg-card);
+  padding: 36px 32px;
+  position: relative;
+  overflow: hidden;
+  transition: background var(--transition);
+  border: 1px solid transparent;
+}
+.game-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
+}
+.game-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 0%, rgba(247,147,30,0.06), transparent 70%);
+  opacity: 0;
+  transition: opacity var(--transition);
+}
+.game-card:hover { background: var(--bg-hover); border-color: var(--line-bright); }
+.game-card:hover::before { transform: scaleX(1); }
+.game-card:hover::after { opacity: 1; }
+.game-card:hover .gc-icon { transform: scale(1.1) rotate(-5deg); color: var(--accent-light); }
+
+.gc-icon {
+  font-size: 32px;
+  margin-bottom: 20px;
+  display: block;
+  transition: transform 0.3s, color 0.3s;
+  color: var(--accent);
+}
+
+.gc-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 28px;
+  letter-spacing: 2px;
+  color: var(--text-primary);
+  margin-bottom: 10px;
+  line-height: 1;
+}
+
+.gc-desc {
+  font-size: 12px;
+  font-weight: 300;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.gc-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.gc-tag {
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--text-muted);
+  border: 1px solid var(--line-bright);
+  padding: 4px 10px;
+  transition: border-color var(--transition), color var(--transition);
+}
+.game-card:hover .gc-tag { border-color: var(--accent-border); color: var(--text-secondary); }
+
+.gc-customize {
+  position: absolute;
+  bottom: 20px;
+  right: 24px;
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: var(--accent);
+  text-transform: uppercase;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity var(--transition), transform var(--transition);
+}
+.game-card:hover .gc-customize { opacity: 1; transform: translateY(0); }
+
+/* ════════════════════════════════════════════════
+   FORMATS SECTION
+════════════════════════════════════════════════ */
+#formats { background: var(--bg-card); }
+
+.formats-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  margin-top: 64px;
+}
+
+.format-block {
+  background: var(--bg-deep);
+  padding: 48px 44px;
+  position: relative;
+  overflow: hidden;
+  transition: background var(--transition);
+}
+.format-block::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; bottom: 0;
+  width: 3px;
+  background: var(--accent);
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform 0.5s cubic-bezier(0.4,0,0.2,1);
+}
+.format-block:hover::before { transform: scaleY(1); }
+.format-block:hover { background: #0f0f0f; }
+
+.fb-badge {
+  display: inline-block;
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--accent);
+  border: 1px solid var(--accent-border);
+  padding: 5px 14px;
+  margin-bottom: 24px;
+  transition: background var(--transition);
+}
+.format-block:hover .fb-badge { background: var(--accent-dim); }
+
+.fb-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 42px;
+  letter-spacing: 2px;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+  line-height: 1;
+}
+
+.fb-desc {
+  font-size: 13px;
+  font-weight: 300;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin-bottom: 28px;
+}
+
+.fb-features {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.fb-features li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  font-weight: 300;
+  line-height: 1.5;
+}
+.fb-features li::before {
+  content: '—';
+  color: var(--accent);
+  flex-shrink: 0;
+  font-weight: 600;
+}
+
+/* ════════════════════════════════════════════════
+   ONLINE / OFFLINE SECTION
+════════════════════════════════════════════════ */
+#geography { background: var(--bg-deep); overflow: hidden; }
+
+.geo-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  margin-top: 64px;
+  align-items: start;
+}
+
+.geo-col-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 52px;
+  letter-spacing: 2px;
+  color: var(--text-primary);
+  margin-bottom: 24px;
+  line-height: 1;
+  position: relative;
+}
+.geo-col-title::after {
+  content: '';
+  position: absolute;
+  bottom: -8px; left: 0;
+  width: 40px; height: 2px;
+  background: var(--accent);
+  transition: width 0.4s;
+}
+.geo-col:hover .geo-col-title::after { width: 100px; }
+
+.geo-col-desc {
+  font-size: 13px;
+  font-weight: 300;
+  color: var(--text-secondary);
+  line-height: 1.8;
+  margin-bottom: 32px;
+}
+
+.geo-items {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.geo-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  background: var(--bg-card);
+  border-left: 2px solid var(--line-bright);
+  transition: border-color var(--transition), background var(--transition);
+}
+.geo-item:hover { border-left-color: var(--accent); background: var(--bg-hover); }
+
+.geo-item-name {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-primary);
+}
+.geo-item-detail {
+  font-size: 11px;
+  color: var(--text-secondary);
+  font-weight: 300;
+}
+
+.geo-divider {
+  width: 1px;
+  background: var(--line);
+  position: absolute;
+  left: 50%;
+  top: 120px;
+  bottom: 120px;
+}
+
+/* ════════════════════════════════════════════════
+   CUSTOMIZATION SECTION
+════════════════════════════════════════════════ */
+#customization { background: var(--bg-card); }
+
+.custom-layout {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 80px;
+  margin-top: 64px;
+  align-items: start;
+}
+
+.custom-intro {
+  font-size: 15px;
+  font-weight: 300;
+  color: var(--text-secondary);
+  line-height: 1.8;
+  margin-bottom: 40px;
+}
+
+.custom-items {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.custom-item {
+  padding: 20px 24px;
+  background: var(--bg-deep);
+  border-left: 2px solid var(--line-bright);
+  transition: border-color var(--transition), background var(--transition), transform var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+.custom-item::after {
+  content: attr(data-num);
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 48px;
+  color: rgba(255,255,255,0.04);
+  line-height: 1;
+}
+.custom-item:hover {
+  border-left-color: var(--accent);
+  background: #0d0d0d;
+  transform: translateX(4px);
+}
+
+.ci-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+}
+.ci-desc {
+  font-size: 12px;
+  font-weight: 300;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.custom-cta-box {
+  background: var(--bg-deep);
+  border: 1px solid var(--line-bright);
+  padding: 44px 40px;
+  position: sticky;
+  top: 84px;
+}
+.custom-cta-box::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent), transparent);
+}
+
+.cta-box-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 36px;
+  letter-spacing: 2px;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+  line-height: 1;
+}
+.cta-box-desc {
+  font-size: 12px;
+  font-weight: 300;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin-bottom: 32px;
+}
+
+.cta-box-input {
+  width: 100%;
+  background: var(--bg-surface);
+  border: 1px solid var(--line-bright);
+  color: var(--text-primary);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  padding: 14px 18px;
+  margin-bottom: 12px;
+  outline: none;
+  transition: border-color var(--transition);
+  -webkit-appearance: none;
+  appearance: none;
+  caret-color: var(--accent);
+}
+.cta-box-input:focus { border-color: var(--accent-border); }
+.cta-box-input::placeholder { color: var(--text-muted); font-size: 11px; letter-spacing: 1px; }
+.cta-box-input:-webkit-autofill,
+.cta-box-input:-webkit-autofill:hover,
+.cta-box-input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0px 1000px var(--bg-surface) inset;
+  -webkit-text-fill-color: var(--text-primary);
+  border-color: var(--accent-border);
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+.cta-box-select {
+  width: 100%;
+  background: var(--bg-surface);
+  border: 1px solid var(--line-bright);
+  color: var(--text-primary);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  font-weight: 400;
+  padding: 14px 18px;
+  margin-bottom: 12px;
+  outline: none;
+  transition: border-color var(--transition);
+  -webkit-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' fill='none'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23f7931e' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+}
+.cta-box-select:focus { border-color: var(--accent-border); }
+.cta-box-select option { background: var(--bg-surface); }
+
+.cta-box-textarea {
+  width: 100%;
+  background: var(--bg-surface);
+  border: 1px solid var(--line-bright);
+  color: var(--text-primary);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  font-weight: 300;
+  padding: 14px 18px;
+  margin-bottom: 20px;
+  outline: none;
+  resize: vertical;
+  min-height: 80px;
+  transition: border-color var(--transition);
+  caret-color: var(--accent);
+}
+.cta-box-textarea:focus { border-color: var(--accent-border); }
+.cta-box-textarea::placeholder { color: var(--text-muted); font-size: 11px; letter-spacing: 1px; }
+
+.form-note {
+  font-size: 10px;
+  color: var(--text-muted);
+  letter-spacing: 1px;
+  margin-top: 12px;
+  text-align: center;
+}
+
+/* ════════════════════════════════════════════════
+   PRICING SECTION
+════════════════════════════════════════════════ */
+#pricing { background: var(--bg-deep); }
+
+.pricing-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  margin-top: 64px;
+}
+
+.pricing-col-label {
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--accent);
+  padding: 10px 16px;
+  background: var(--accent-dim);
+  border-left: 2px solid var(--accent);
+  margin-bottom: 12px;
+}
+
+.p-card {
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--line-bright);
+  padding: 24px 28px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 120px;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+.p-card.featured {
+  border-color: var(--line);
+  border-left: 3px solid var(--accent);
+  background: var(--bg-surface);
+}
+.p-card.featured::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent), transparent);
+}
+
+.pc-row { display: flex; justify-content: space-between; align-items: flex-end; }
+
+.p-size {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 36px;
+  color: var(--text-primary);
+  line-height: 1;
+}
+.p-size small {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10px;
+  color: var(--text-secondary);
+  font-weight: 400;
+  letter-spacing: 1px;
+  margin-left: 4px;
+}
+
+.p-tag {
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+.p-price {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 30px;
+  color: var(--accent);
+  letter-spacing: 1px;
+}
+
+.p-negotiate {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 18px;
+  color: var(--text-secondary);
+  letter-spacing: 1px;
+}
+
+/* ════════════════════════════════════════════════
+   WHY US
+════════════════════════════════════════════════ */
+#why { background: var(--bg-card); }
+
+.why-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2px;
+  margin-top: 64px;
+}
+
+.why-card {
+  background: var(--bg-deep);
+  padding: 36px 28px;
+  position: relative;
+  overflow: hidden;
+  transition: background var(--transition);
+}
+.why-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transition: transform 0.4s;
+}
+.why-card:hover { background: #0e0e0e; }
+.why-card:hover::after { transform: scaleX(1); }
+.why-card:hover .wc-big { transform: scale(1.05); }
+
+.wc-big {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 56px;
+  color: var(--accent);
+  line-height: 1;
+  transition: transform 0.3s;
+}
+.wc-title {
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 8px 0 16px;
+}
+.wc-desc {
+  font-size: 12px;
+  font-weight: 300;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* ════════════════════════════════════════════════
+   HOW IT WORKS
+════════════════════════════════════════════════ */
+#howto { background: var(--bg-deep); }
+
+.steps-layout {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2px;
+  margin-top: 64px;
+  position: relative;
+}
+
+.step-card {
+  background: var(--bg-card);
+  padding: 36px 28px;
+  border-left: 2px solid var(--line);
+  position: relative;
+  transition: border-color var(--transition), background var(--transition);
+  overflow: hidden;
+}
+.step-card:hover { border-left-color: var(--accent); background: var(--bg-hover); }
+.step-card:hover .step-num-big { opacity: 0.06; }
+
+.step-num-big {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 96px;
+  color: rgba(255,255,255,0.03);
+  line-height: 1;
+  position: absolute;
+  bottom: -10px; right: 16px;
+  transition: opacity 0.3s;
+}
+
+.step-icon {
+  font-size: 24px;
+  margin-bottom: 20px;
+  display: block;
+  color: var(--accent);
+}
+.step-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 13px;
+  color: var(--accent);
+  letter-spacing: 2px;
+  margin-bottom: 12px;
+}
+.step-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+}
+.step-desc {
+  font-size: 12px;
+  font-weight: 300;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* ════════════════════════════════════════════════
+   CONTACT SECTION (FINAL CTA)
+════════════════════════════════════════════════ */
+#contact {
+  background: var(--bg-deep);
+  padding: 120px 60px;
+  position: relative;
+  overflow: hidden;
+}
+
+#contact::before {
+  content: '';
+  position: absolute;
+  top: -200px; left: -200px;
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(247,147,30,0.05), transparent 70%);
+  pointer-events: none;
+}
+
+.contact-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: start;
+}
+
+.contact-left {}
+
+.contact-h {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(48px, 6vw, 88px);
+  letter-spacing: 2px;
+  line-height: 0.9;
+  color: var(--text-primary);
+  margin-bottom: 32px;
+}
+.contact-h .accent { color: var(--accent); }
+
+.contact-desc {
+  font-size: 13px;
+  font-weight: 300;
+  color: var(--text-secondary);
+  line-height: 1.8;
+  margin-bottom: 48px;
+}
+
+.contact-channels {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.contact-channel {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  background: var(--bg-card);
+  border-left: 2px solid var(--line);
+  text-decoration: none;
+  transition: border-color var(--transition), background var(--transition), transform var(--transition);
+}
+.contact-channel:hover {
+  border-left-color: var(--accent);
+  background: var(--bg-hover);
+  transform: translateX(4px);
+}
+
+.cc-icon { font-size: 20px; }
+.cc-label {
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+.cc-value {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-top: 2px;
+}
+.cc-arr {
+  margin-left: auto;
+  color: var(--accent);
+  font-size: 18px;
+  opacity: 0;
+  transform: translateX(-8px);
+  transition: opacity var(--transition), transform var(--transition);
+}
+.contact-channel:hover .cc-arr { opacity: 1; transform: translateX(0); }
+
+.contact-form-box {
+  background: var(--bg-card);
+  border: 1px solid var(--line-bright);
+  padding: 44px 40px;
+  position: relative;
+}
+.contact-form-box::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent), rgba(247,147,30,0.2));
+}
+
+.cfb-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 32px;
+  letter-spacing: 2px;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+.cfb-sub {
+  font-size: 11px;
+  color: var(--text-secondary);
+  letter-spacing: 1px;
+  margin-bottom: 28px;
+  font-weight: 300;
+}
+
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
+.form-row .cta-box-input { margin-bottom: 0; }
+
+.form-success {
+  display: none;
+  text-align: center;
+  padding: 32px;
+}
+.form-success .fs-icon { font-size: 40px; margin-bottom: 16px; display: block; }
+.form-success .fs-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 28px;
+  color: var(--accent);
+  letter-spacing: 2px;
+  margin-bottom: 8px;
+}
+.form-success .fs-desc { font-size: 12px; color: var(--text-secondary); font-weight: 300; }
+
+/* ════════════════════════════════════════════════
+   FOOTER
+════════════════════════════════════════════════ */
+footer {
+  background: #050505;
+  border-top: 1px solid var(--line);
+  padding: 40px 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.footer-brand {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 4px;
+  color: var(--accent);
+  text-transform: uppercase;
+}
+
+.footer-links {
+  display: flex;
+  gap: 32px;
+  list-style: none;
+}
+
+.footer-links a {
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--text-muted);
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: color var(--transition);
+}
+.footer-links a:hover { color: var(--text-secondary); }
+
+.footer-copy {
+  font-size: 10px;
+  color: var(--text-muted);
+  letter-spacing: 1px;
+}
+
+/* ════════════════════════════════════════════════
+   SCROLL ANIMATIONS
+════════════════════════════════════════════════ */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.7s cubic-bezier(0.4,0,0.2,1), transform 0.7s cubic-bezier(0.4,0,0.2,1);
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+.reveal-delay-5 { transition-delay: 0.5s; }
+.reveal-delay-6 { transition-delay: 0.6s; }
+
+/* ════════════════════════════════════════════════
+   MOBILE RESPONSIVE (basic)
+════════════════════════════════════════════════ */
+/* ════════════════════════════════════════════════
+   BURGER MENU (mobile)
+════════════════════════════════════════════════ */
+.burger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 4px;
+  z-index: 1100;
+}
+.burger span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: var(--text-primary);
+  transition: all 0.3s ease;
+  transform-origin: center;
+}
+.burger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.burger.open span:nth-child(2) { opacity: 0; }
+.burger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+.mobile-menu {
+  display: none;
+  position: fixed;
+  top: 64px; left: 0; right: 0;
+  background: rgba(10,10,10,0.98);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--line);
+  z-index: 999;
+  padding: 24px 24px 32px;
+  flex-direction: column;
+  gap: 0;
+}
+.mobile-menu.open { display: flex; }
+.mobile-menu a {
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-decoration: none;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--line);
+  transition: color var(--transition);
+}
+.mobile-menu a:last-child { border-bottom: none; }
+.mobile-menu a:hover { color: var(--accent); }
+.mobile-menu .mob-cta {
+  margin-top: 20px;
+  background: var(--accent);
+  color: var(--bg-deep);
+  font-size: 11px;
+  letter-spacing: 2px;
+  font-weight: 700;
+  text-transform: uppercase;
+  text-align: center;
+  padding: 14px;
+  border-bottom: none !important;
+}
+.mobile-menu .mob-cta:hover { background: var(--accent-light); color: var(--bg-deep); }
+
+/* ════════════════════════════════════════════════
+   TABLET  ≤ 1024px
+════════════════════════════════════════════════ */
+@media (max-width: 1024px) {
+  nav { padding: 0 32px; }
+  section { padding: 100px 40px; }
+  #hero { padding: 64px 40px 80px; }
+  .games-grid { grid-template-columns: 1fr 1fr; }
+  .formats-layout { grid-template-columns: 1fr 1fr; }
+  .custom-layout { grid-template-columns: 1fr; }
+  .pricing-layout { grid-template-columns: 1fr 1fr; }
+  .why-grid { grid-template-columns: 1fr 1fr; }
+  .steps-layout { grid-template-columns: 1fr 1fr; }
+  .contact-layout { grid-template-columns: 1fr; gap: 40px; }
+}
+
+/* ════════════════════════════════════════════════
+   MOBILE  ≤ 768px
+════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  /* Nav */
+  nav { padding: 0 20px; }
+  .nav-links { display: none; }
+  .nav-cta { display: none; }
+  .burger { display: flex; }
+
+  /* Sections */
+  section { padding: 72px 20px; }
+  #hero { padding: 80px 20px 64px; }
+  #games { padding: 0 !important; }
+
+  /* Hero */
+  .hero-eyebrow { font-size: 9px; }
+  .hero-sub { font-size: 13px; margin-top: 20px; }
+  .hero-h1 { font-size: clamp(36px, 11vw, 72px); letter-spacing: 1px; }
+  .hero-actions { flex-direction: column; gap: 12px; align-items: flex-start; }
+  .btn-primary, .btn-secondary { width: 100%; text-align: center; padding: 16px 20px; }
+  .hero-stats { display: none; }
+  .hero-vline { display: none; }
+  .scroll-hint { display: none; }
+
+  /* Sec headers */
+  .sec-sub { font-size: 13px; }
+
+  /* Game cards */
+  .games-grid { grid-template-columns: 1fr !important; }
+  .game-card { padding: 28px 20px; }
+  .gc-title { font-size: 24px; }
+  .gc-desc { font-size: 12px; }
+
+  /* Inline grids inside game cards */
+  .game-card [style*="grid-template-columns: repeat(4"] { grid-template-columns: 1fr 1fr !important; }
+  .game-card [style*="grid-template-columns: repeat(2"] { grid-template-columns: 1fr !important; }
+  .game-card [style*="grid-template-columns:1fr 1fr"] { grid-template-columns: 1fr !important; }
+  .game-card [style*="grid-template-columns: 1fr 1fr"] { grid-template-columns: 1fr !important; }
+
+  /* Formats */
+  .formats-layout { grid-template-columns: 1fr !important; }
+  .format-block { padding: 32px 20px; }
+
+  /* Customization */
+  .custom-layout { grid-template-columns: 1fr; }
+  .custom-intro { font-size: 14px; }
+  .ci-title { font-size: 14px; }
+  .cta-box-input, .cta-box-select, .cta-box-textarea { font-size: 13px; }
+
+  /* Pricing */
+  .pricing-layout { grid-template-columns: 1fr !important; }
+  .p-card { padding: 20px; }
+  .p-size { font-size: 28px; }
+
+  /* Why */
+  .why-grid { grid-template-columns: 1fr !important; }
+  .why-item { padding: 24px 20px; }
+
+  /* Steps */
+  .steps-layout { grid-template-columns: 1fr !important; }
+
+  /* Contact */
+  #contact { padding: 72px 20px; }
+  .contact-layout { grid-template-columns: 1fr; gap: 32px; }
+  .cfb-title { font-size: 20px; }
+  .contact-form-box { padding: 28px 20px; }
+  .form-row { grid-template-columns: 1fr !important; gap: 0 !important; }
+  .form-row .cta-box-input,
+  .form-row .cta-box-select { margin-bottom: 12px; }
+
+  /* Footer */
+  footer { flex-direction: column; gap: 20px; text-align: center; padding: 40px 20px; }
+  .footer-links { flex-wrap: wrap; justify-content: center; gap: 16px; }
+
+  /* Cursor off */
+  #cursor, #cursor-ring { display: none; }
+  body { cursor: auto; }
+  a, button { cursor: pointer; }
+}
+
+/* ════════════════════════════════════════════════
+   SMALL MOBILE  ≤ 480px
+════════════════════════════════════════════════ */
+@media (max-width: 480px) {
+  section { padding: 60px 16px; }
+  #hero { padding: 80px 16px 56px; }
+  nav { padding: 0 16px; }
+
+  .hero-sub { font-size: 12px; }
+  .hero-h1 { font-size: clamp(32px, 10vw, 56px); }
+  .hero-actions { gap: 10px; }
+
+  .sec-title { letter-spacing: 1px; }
+  .sec-sub { font-size: 12px; }
+
+  .game-card { padding: 24px 16px; }
+  .gc-title { font-size: 22px; }
+  .game-card [style*="grid-template-columns: repeat(4"] { grid-template-columns: 1fr 1fr !important; }
+
+  .format-block { padding: 28px 16px; }
+  .fb-title { font-size: 22px; }
+
+  .p-price { font-size: 22px; }
+  .p-size { font-size: 24px; }
+
+  .why-item { padding: 20px 16px; }
+  .wi-title { font-size: 14px; }
+
+  .cta-box-input, .cta-box-select, .cta-box-textarea { padding: 12px 14px; font-size: 12px; }
+  .contact-form-box { padding: 24px 16px; }
+  #contact { padding: 60px 16px; }
+
+  footer { padding: 32px 16px; }
+  .footer-brand { font-size: 18px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Cursor -->
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- ══════════════════════════════════════
+     NAV
+══════════════════════════════════════ -->
+<nav>
+  <a class="nav-logo" href="#hero">Tbilissimo</a>
+  <ul class="nav-links">
+    <li><a href="#games">Форматы</a></li>
+    <li><a href="#formats">Сотрудничество</a></li>
+    <li><a href="#pricing">Стоимость</a></li>
+    <li><a href="#why">О нас</a></li>
+  </ul>
+  <a class="nav-cta" href="#contact">Обсудить проект</a>
+  <button class="burger" id="burger" aria-label="Меню">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="mobile-menu" id="mobile-menu">
+  <a href="#games" onclick="closeMobileMenu()">Форматы</a>
+  <a href="#formats" onclick="closeMobileMenu()">Сотрудничество</a>
+  <a href="#pricing" onclick="closeMobileMenu()">Стоимость</a>
+  <a href="#why" onclick="closeMobileMenu()">О нас</a>
+  <a href="#contact" class="mob-cta" onclick="closeMobileMenu()">Обсудить проект</a>
+</div>
+
+<!-- ══════════════════════════════════════
+     HERO
+══════════════════════════════════════ -->
+<section id="hero">
+  <div class="hero-vline"></div>
+  <div class="hero-eyebrow">Корпоративный тимбилдинг нового уровня</div>
+  <h1 class="hero-h1">
+    Игры, которые<br>
+    <span class="accent">объединяют</span><br>
+    команды
+  </h1>
+  <p class="hero-sub">
+    Корпоративная Мафия — онлайн и&nbsp;оффлайн. Профессиональные ведущие, полная кастомизация под ваш бренд, опыт 10+ лет.
+  </p>
+  <div class="hero-actions">
+    <a href="#contact" class="btn-primary">Заказать тимбилдинг</a>
+    <a href="#games" class="btn-secondary">Посмотреть игры →</a>
+  </div>
+
+  <div class="hero-stats">
+    <div class="h-stat">
+      <div class="n">10+</div>
+      <div class="l">Лет опыта</div>
+    </div>
+    <div class="h-stat">
+      <div class="n">500+</div>
+      <div class="l">Корпоративов</div>
+    </div>
+    <div class="h-stat">
+      <div class="n">60+</div>
+      <div class="l">Игроков за раз</div>
+    </div>
+  </div>
+
+  <div class="scroll-hint">
+    <span>Скролл</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     GAMES
+══════════════════════════════════════ -->
+<section id="games" style="padding: 0;">
+  <div class="games-grid" style="grid-template-columns: 1fr 1fr; margin-top: 0;">
+
+    <div class="game-card reveal reveal-delay-1">
+      <span class="gc-icon">💻</span>
+      <div class="gc-title">Онлайн</div>
+      <div class="gc-desc">
+        Игра проходит в Discord с профессиональной модерацией. Участники подключаются из любой точки мира — ничего устанавливать не нужно, только ссылка и желание играть.<br><br>
+        Ведущий управляет всей динамикой: объясняет правила, ведёт раунды, следит за темпом и проводит разбор по итогам. Параллельные столы позволяют охватить до 60 человек одновременно.
+      </div>
+      <div class="gc-tags" style="margin-bottom:20px;">
+        <span class="gc-tag">Discord</span>
+        <span class="gc-tag">12–60 чел.</span>
+        <span class="gc-tag">1,5–2 часа</span>
+        <span class="gc-tag">Любой город</span>
+        <span class="gc-tag">RU + EN</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-bottom:20px;">
+        <div style="background:var(--bg-surface);padding:12px 14px;display:flex;justify-content:space-between;align-items:center;">
+          <span style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-primary);">Zoom / Teams / Meet</span>
+          <span style="font-size:11px;color:var(--text-secondary);">Любая платформа</span>
+        </div>
+        <div style="background:var(--bg-surface);padding:12px 14px;display:flex;justify-content:space-between;align-items:center;">
+          <span style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-primary);">Распределённые команды</span>
+          <span style="font-size:11px;color:var(--text-secondary);">Разные города и страны</span>
+        </div>
+        <div style="background:var(--bg-surface);padding:12px 14px;display:flex;justify-content:space-between;align-items:center;">
+          <span style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-primary);">Технический ведущий</span>
+          <span style="font-size:11px;color:var(--text-secondary);">Поддержка на протяжении игры</span>
+        </div>
+        <div style="background:var(--bg-surface);padding:12px 14px;display:flex;justify-content:space-between;align-items:center;">
+          <span style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-primary);">Русский и английский</span>
+          <span style="font-size:11px;color:var(--text-secondary);">Мультинациональные команды</span>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;">
+        <div style="border:1px solid var(--line-bright);padding:14px;">
+          <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:10px;">Что входит</div>
+          <ul style="font-size:12px;color:var(--text-secondary);line-height:1.9;padding-left:14px;">
+            <li>Профессиональный ведущий</li>
+            <li>Сценарий под уровень команды</li>
+            <li>Техническое сопровождение</li>
+            <li>Настройка ролей и правила</li>
+            <li>Разбор и ключевые моменты</li>
+          </ul>
+        </div>
+        <div style="border:1px solid var(--line-bright);padding:14px;">
+          <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:10px;">Опционально</div>
+          <ul style="font-size:12px;color:var(--text-secondary);line-height:1.9;padding-left:14px;">
+            <li>Брендирование материалов</li>
+            <li>Адаптация терминологии</li>
+            <li>Параллельные столы (до 5)</li>
+            <li>Игра на английском языке</li>
+            <li>Турнирный формат</li>
+          </ul>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;">
+        <div style="background:var(--bg-surface);padding:12px;text-align:center;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--accent);">9 000 ₽</div>
+          <div style="font-size:9px;color:var(--text-secondary);margin-top:4px;">12 игроков</div>
+        </div>
+        <div style="background:var(--accent-dim);border:1px solid var(--accent-border);padding:12px;text-align:center;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--accent);">15 300 ₽</div>
+          <div style="font-size:9px;color:var(--text-secondary);margin-top:4px;">24 игрока −15%</div>
+        </div>
+        <div style="background:var(--bg-surface);padding:12px;text-align:center;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--accent);">21 600 ₽</div>
+          <div style="font-size:9px;color:var(--text-secondary);margin-top:4px;">36 игроков −20%</div>
+        </div>
+        <div style="background:var(--bg-surface);padding:12px;text-align:center;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--accent);">27 000 ₽</div>
+          <div style="font-size:9px;color:var(--text-secondary);margin-top:4px;">48+ игроков −25%</div>
+        </div>
+      </div>
+      <span class="gc-customize" style="opacity:1;transform:none;margin-top:16px;display:inline-block;">Заказать →</span>
+    </div>
+
+    <div class="game-card reveal reveal-delay-2">
+      <span class="gc-icon">🎭</span>
+      <div class="gc-title">Оффлайн</div>
+      <div class="gc-desc">
+        Ведущий приезжает к вам в офис или на любую площадку. Привозим весь реквизит: карточки ролей, таймер, оборудование. Вам нужно только подготовить пространство — всё остальное берём на себя.<br><br>
+        Живой формат создаёт особую атмосферу: эмоции, напряжение, смех и неожиданные повороты, которые команда будет вспоминать ещё долго. Идеально для корпоративов, квартальных итогов и тимбилдинга.
+      </div>
+      <div class="gc-tags" style="margin-bottom:20px;">
+        <span class="gc-tag">Выезд ведущего</span>
+        <span class="gc-tag">12–60 чел.</span>
+        <span class="gc-tag">2–3 часа</span>
+        <span class="gc-tag">Реквизит с собой</span>
+        <span class="gc-tag">Все крупные города</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-bottom:20px;">
+        <div style="background:var(--bg-surface);padding:12px 14px;display:flex;justify-content:space-between;align-items:center;">
+          <span style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-primary);">Ваш офис или площадка</span>
+          <span style="font-size:11px;color:var(--text-secondary);">Любое пространство</span>
+        </div>
+        <div style="background:var(--bg-surface);padding:12px 14px;display:flex;justify-content:space-between;align-items:center;">
+          <span style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-primary);">Реквизит с собой</span>
+          <span style="font-size:11px;color:var(--text-secondary);">Карточки, оборудование, декор</span>
+        </div>
+        <div style="background:var(--bg-surface);padding:12px 14px;display:flex;justify-content:space-between;align-items:center;">
+          <span style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-primary);">Все крупные города</span>
+          <span style="font-size:11px;color:var(--text-secondary);">Русскоязычные страны</span>
+        </div>
+        <div style="background:var(--bg-surface);padding:12px 14px;display:flex;justify-content:space-between;align-items:center;">
+          <span style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-primary);">Выезд от 12 человек</span>
+          <span style="font-size:11px;color:var(--text-secondary);">Базовый пакет от 19 000 ₽</span>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;">
+        <div style="border:1px solid var(--line-bright);padding:14px;">
+          <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:10px;">Что входит</div>
+          <ul style="font-size:12px;color:var(--text-secondary);line-height:1.9;padding-left:14px;">
+            <li>Выезд профессионального ведущего</li>
+            <li>Реквизит и карточки ролей</li>
+            <li>Кастомный сценарий</li>
+            <li>Объяснение правил и разминка</li>
+            <li>Разбор игры и итоги</li>
+          </ul>
+        </div>
+        <div style="border:1px solid var(--line-bright);padding:14px;">
+          <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:10px;">Опционально</div>
+          <ul style="font-size:12px;color:var(--text-secondary);line-height:1.9;padding-left:14px;">
+            <li>Брендированные материалы</li>
+            <li>Фото- и видеосъёмка</li>
+            <li>Несколько столов параллельно</li>
+            <li>Турнирная сетка</li>
+            <li>Награждение победителей</li>
+          </ul>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;">
+        <div style="background:var(--bg-surface);padding:12px;text-align:center;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--accent);">19 000 ₽</div>
+          <div style="font-size:9px;color:var(--text-secondary);margin-top:4px;">12 игроков · базовый</div>
+        </div>
+        <div style="background:var(--accent-dim);border:1px solid var(--accent-border);padding:12px;text-align:center;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--accent);">34 000 ₽</div>
+          <div style="font-size:9px;color:var(--text-secondary);margin-top:4px;">24 игрока · 2 стола</div>
+        </div>
+        <div style="background:var(--bg-surface);padding:12px;text-align:center;grid-column:span 2;">
+          <div style="font-size:12px;color:var(--text-secondary);">30–60 и более — индивидуальный расчёт</div>
+        </div>
+
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════
+     CUSTOMIZATION
+══════════════════════════════════════ -->
+<section id="customization">
+  <div class="sec-num">03</div>
+  <div class="sec-label reveal">Кастомизация</div>
+  <h2 class="sec-title reveal reveal-delay-1">Под ваш бренд</h2>
+
+  <div class="custom-layout">
+    <div>
+      <p class="custom-intro reveal reveal-delay-2">
+        Мафия может быть полностью адаптирована под корпоративный стиль компании. Мы не просто проводим готовый продукт — мы создаём уникальный игровой опыт, в котором узнаёт себя ваша команда.
+      </p>
+
+      <div class="custom-items">
+        <div class="custom-item reveal reveal-delay-1" data-num="01">
+          <div class="ci-title">Визуальный стиль</div>
+          <div class="ci-desc">Карточки, интерфейс, презентации и материалы в цветах и шрифтах вашего бренда. Логотип, фирменные иллюстрации, корпоративная цветовая схема.</div>
+        </div>
+        <div class="custom-item reveal reveal-delay-2" data-num="02">
+          <div class="ci-title">Роли и персонажи</div>
+          <div class="ci-desc">Персонажи игры могут быть назваными в честь реальных должностей, отделов или корпоративных архетипов. Роли отражают должности и архетипы: руководители, конкуренты, союзники.</div>
+        </div>
+        <div class="custom-item reveal reveal-delay-3" data-num="03">
+          <div class="ci-title">Сюжет и формулировки</div>
+          <div class="ci-desc">Сценарий пишем вокруг понятных команде ситуаций: запуск продукта, выход на рынок, кризис репутации. Язык игры — язык вашей компании.</div>
+        </div>
+        <div class="custom-item reveal reveal-delay-4" data-num="04">
+          <div class="ci-title">Задачи и механики</div>
+          <div class="ci-desc">Встраиваем в игру ваши HR-цели: доверие между отделами, кросс-функциональное взаимодействие, лидерство, принятие решений в условиях неопределённости.</div>
+        </div>
+        <div class="custom-item reveal reveal-delay-5" data-num="05">
+          <div class="ci-title">Брендированные материалы</div>
+          <div class="ci-desc">Физические или цифровые материалы с вашим брендингом — карточки ролей, инструкции для участников, сертификаты победителей, итоговый отчёт.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sidebar contact form -->
+    <div>
+      <div class="custom-cta-box reveal reveal-delay-2">
+        <div class="cta-box-title">Обсудить кастомизацию</div>
+        <div class="cta-box-desc">Расскажите о вашей компании — предложим оптимальный формат Мафии и адаптируем под ваши задачи.</div>
+
+        <input class="cta-box-input" type="text" placeholder="Компания / ваше имя" id="sidebar-name">
+        <input class="cta-box-input" type="text" placeholder="Количество участников" id="sidebar-count">
+        <select class="cta-box-select" id="sidebar-game">
+          <option value="" disabled selected>Формат мероприятия</option>
+          <option>Мафия — онлайн</option>
+          <option>Мафия — оффлайн</option>
+          <option>Мафия — турнирный формат</option>
+          <option>Мафия — кастомная корпоративная версия</option>
+          <option>Ещё не решили</option>
+        </select>
+        <textarea class="cta-box-textarea" placeholder="Расскажите о задаче или пожеланиях..." id="sidebar-message"></textarea>
+        <button class="btn-primary" style="width:100%;text-align:center;padding:16px;" onclick="sendToTelegram('sidebar')">Отправить запрос</button>
+        <p class="form-note">Ответим в Telegram в течение нескольких часов</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     PRICING
+══════════════════════════════════════ -->
+<section id="pricing">
+  <div class="sec-num">04</div>
+  <div class="sec-label reveal">Стоимость</div>
+  <h2 class="sec-title reveal reveal-delay-1">Прозрачные цены</h2>
+  <p class="sec-sub reveal reveal-delay-2">Фиксированная стоимость для стандартных команд. Для крупных мероприятий и турниров — рассчитаем индивидуально.</p>
+
+  <div class="pricing-layout">
+
+    <!-- ONLINE -->
+    <div class="reveal reveal-delay-1">
+      <div class="pricing-col-label">Онлайн</div>
+
+      <div class="p-card">
+        <div class="pc-row">
+          <div>
+            <div class="p-size">12 <small>игроков</small></div>
+            <div class="p-tag">Базовый тариф · 1 ведущий · 1,5–2 часа</div>
+          </div>
+          <div class="p-price">9 000 ₽</div>
+        </div>
+      </div>
+
+      <div class="p-card featured">
+        <div class="pc-row">
+          <div>
+            <div class="p-size">24 <small>игрока</small></div>
+            <div class="p-tag">2 ведущих параллельно</div>
+          </div>
+          <div class="p-price">15 300 ₽</div>
+        </div>
+      </div>
+
+      <div class="p-card" style="border-style:dashed;">
+        <div class="pc-row">
+          <div>
+            <div class="p-size">24+ <small>игроков</small></div>
+            <div class="p-tag">До 5 столов одновременно · до 60 человек</div>
+          </div>
+          <div class="p-negotiate">По договорён-<br>ности</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- OFFLINE -->
+    <div class="reveal reveal-delay-2">
+      <div class="pricing-col-label">Оффлайн</div>
+
+      <div class="p-card">
+        <div class="pc-row">
+          <div>
+            <div class="p-size">12 <small>игроков</small></div>
+            <div class="p-tag">Выезд ведущего · реквизит · 2–3 часа</div>
+          </div>
+          <div class="p-price">19 000 ₽</div>
+        </div>
+      </div>
+
+      <div class="p-card featured">
+        <div class="pc-row">
+          <div>
+            <div class="p-size">24 <small>игрока</small></div>
+            <div class="p-tag">2 стола · 2 ведущих</div>
+          </div>
+          <div class="p-price">34 000 ₽</div>
+        </div>
+      </div>
+
+      <div class="p-card" style="border-style:dashed;">
+        <div class="pc-row">
+          <div>
+            <div class="p-size">24+ <small>игроков</small></div>
+            <div class="p-tag">Крупные мероприятия · индивидуальный расчёт</div>
+          </div>
+          <div class="p-negotiate">По договорён-<br>ности</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     WHY US
+══════════════════════════════════════ -->
+<section id="why">
+  <div class="sec-num">05</div>
+  <div class="sec-label reveal">Почему Tbilissimo</div>
+  <h2 class="sec-title reveal reveal-delay-1">Профессионалы игры</h2>
+
+  <div class="why-grid">
+    <div class="why-card reveal reveal-delay-1">
+      <div class="wc-big">10+</div>
+      <div class="wc-title">Лет опыта</div>
+      <div class="wc-desc">Проводим игры с 2013 года. За это время отточили форматы, сценарии и методологию до высшего стандарта.</div>
+    </div>
+    <div class="why-card reveal reveal-delay-2">
+      <div class="wc-big">500+</div>
+      <div class="wc-title">Корпоративов</div>
+      <div class="wc-desc">Опыт с командами от стартапов до международных корпораций. Знаем как работать с любой аудиторией.</div>
+    </div>
+    <div class="why-card reveal reveal-delay-3">
+      <div class="wc-big">INT</div>
+      <div class="wc-title">Двуязычный формат</div>
+      <div class="wc-desc">Русский и английский языки. Идеально для мультинациональных команд и международных офисов.</div>
+    </div>
+    <div class="why-card reveal reveal-delay-4">
+      <div class="wc-big">∞</div>
+      <div class="wc-title">Кастомизация</div>
+      <div class="wc-desc">Ни один сценарий не повторяется. Каждая игра адаптирована под конкретную компанию, её культуру и задачи.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     HOW IT WORKS
+══════════════════════════════════════ -->
+<section id="howto">
+  <div class="sec-num">06</div>
+  <div class="sec-label reveal">Процесс</div>
+  <h2 class="sec-title reveal reveal-delay-1">Как это работает</h2>
+
+  <div class="steps-layout">
+    <div class="step-card reveal reveal-delay-1">
+      <span class="step-icon">💬</span>
+      <div class="step-num">— 01</div>
+      <div class="step-title">Обсуждаем задачу</div>
+      <div class="step-desc">Узнаём о команде, её размере, целях мероприятия и предпочтениях. Онлайн или оффлайн — вы решаете.</div>
+      <span class="step-num-big">01</span>
+    </div>
+    <div class="step-card reveal reveal-delay-2">
+      <span class="step-icon">🎯</span>
+      <div class="step-num">— 02</div>
+      <div class="step-title">Подбираем формат</div>
+      <div class="step-desc">Предлагаем оптимальную игру, адаптируем сценарий, согласовываем дату и количество ведущих.</div>
+      <span class="step-num-big">02</span>
+    </div>
+    <div class="step-card reveal reveal-delay-3">
+      <span class="step-icon">⚙️</span>
+      <div class="step-num">— 03</div>
+      <div class="step-title">Готовим мероприятие</div>
+      <div class="step-desc">Разрабатываем кастомный сценарий, готовим материалы, проводим техническую проверку. Вы ничего не делаете.</div>
+      <span class="step-num-big">03</span>
+    </div>
+    <div class="step-card reveal reveal-delay-4">
+      <span class="step-icon">🎉</span>
+      <div class="step-num">— 04</div>
+      <div class="step-title">Проводим игру</div>
+      <div class="step-desc">Профессиональный ведущий управляет процессом. После — разбор, награждение и отчёт для HR.</div>
+      <span class="step-num-big">04</span>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     CONTACT
+══════════════════════════════════════ -->
+<section id="contact">
+  <div class="contact-layout">
+
+    <div class="contact-left">
+      <div class="sec-label reveal">Связаться</div>
+      <h2 class="contact-h reveal reveal-delay-1">
+        Начнём<br>
+        <span class="accent">сейчас</span>
+      </h2>
+      <p class="contact-desc reveal reveal-delay-2">
+        Расскажите о вашей команде — ответим быстро, предложим подходящий формат и рассчитаем стоимость. Никаких затяжных согласований.
+      </p>
+
+      <div class="contact-channels reveal reveal-delay-3">
+        <a class="contact-channel" href="https://t.me/naummasha" target="_blank" rel="noopener">
+          <span class="cc-icon">✈️</span>
+          <div>
+            <div class="cc-label">Telegram</div>
+            <div class="cc-value">@naummasha</div>
+          </div>
+          <span class="cc-arr">→</span>
+        </a>
+        <a class="contact-channel" href="https://t.me/naummasha" target="_blank" rel="noopener">
+          <span class="cc-icon">💬</span>
+          <div>
+            <div class="cc-label">Написать напрямую</div>
+            <div class="cc-value">Ответим в течение нескольких часов</div>
+          </div>
+          <span class="cc-arr">→</span>
+        </a>
+      </div>
+    </div>
+
+    <div>
+      <div class="contact-form-box reveal reveal-delay-2">
+        <div id="contact-form-content">
+          <div class="cfb-title">Заявка на тимбилдинг</div>
+          <div class="cfb-sub">Заполните форму — свяжемся в Telegram</div>
+
+          <div class="form-row">
+            <input class="cta-box-input" type="text" placeholder="Ваше имя" id="cf-name" style="margin-bottom:0;">
+            <input class="cta-box-input" type="text" placeholder="Компания" id="cf-company" style="margin-bottom:0;">
+          </div>
+          <input class="cta-box-input" type="text" placeholder="Telegram / телефон для связи" id="cf-contact">
+          <div class="form-row">
+            <select class="cta-box-select" id="cf-format" style="margin-bottom:0;">
+              <option value="" disabled selected>Формат</option>
+              <option>Онлайн</option>
+              <option>Оффлайн</option>
+              <option>Не решили</option>
+            </select>
+            <input class="cta-box-input" type="text" placeholder="Кол-во участников" id="cf-count" style="margin-bottom:0;">
+          </div>
+          <select class="cta-box-select" id="cf-game">
+            <option value="" disabled selected>Интересующая игра (необязательно)</option>
+            <option>Мафия</option>
+            <option>Детектив</option>
+            <option>Расследование</option>
+            <option>Квиз</option>
+  
+            <option>Битва корпораций</option>
+            <option>Покер</option>
+            <option>Ежемесячный тимбилдинг</option>
+            <option>Крупный корпоратив</option>
+            <option>Помогите выбрать</option>
+          </select>
+          <textarea class="cta-box-textarea" placeholder="Дополнительные пожелания, даты, бюджет..." id="cf-message"></textarea>
+          <button class="btn-primary" style="width:100%;text-align:center;padding:18px;" onclick="sendToTelegram('main')">Отправить заявку в Telegram →</button>
+          <p class="form-note">Нажимая кнопку, вы соглашаетесь на обработку персональных данных</p>
+        </div>
+        <div class="form-success" id="form-success">
+          <span class="fs-icon">🎯</span>
+          <div class="fs-title">Заявка отправлена!</div>
+          <div class="fs-desc">Ваш запрос направлен в Telegram @naummasha. Ответим в ближайшее время и подберём идеальный формат для вашей команды.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     FOOTER
+══════════════════════════════════════ -->
+<footer>
+  <div class="footer-brand">Tbilissimo</div>
+  <ul class="footer-links">
+    <li><a href="#games">Игры</a></li>
+    <li><a href="#formats">Форматы</a></li>
+    <li><a href="#pricing">Цены</a></li>
+    <li><a href="https://t.me/naummasha" target="_blank">Telegram</a></li>
+  </ul>
+  <div class="footer-copy">© 2024 Tbilissimo Club</div>
+</footer>
+
+<!-- ══════════════════════════════════════
+     JS
+══════════════════════════════════════ -->
+<script>
+/* ─── Custom cursor ─── */
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursor-ring');
+let mx = 0, my = 0, rx = 0, ry = 0;
+
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cursor.style.left = mx + 'px';
+  cursor.style.top = my + 'px';
+});
+
+function animateRing() {
+  rx += (mx - rx) * 0.12;
+  ry += (my - ry) * 0.12;
+  ring.style.left = rx + 'px';
+  ring.style.top = ry + 'px';
+  requestAnimationFrame(animateRing);
+}
+animateRing();
+
+document.addEventListener('mouseleave', () => {
+  cursor.style.opacity = '0';
+  ring.style.opacity = '0';
+});
+document.addEventListener('mouseenter', () => {
+  cursor.style.opacity = '1';
+  ring.style.opacity = '1';
+});
+
+/* ─── Scroll reveal ─── */
+const reveals = document.querySelectorAll('.reveal');
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      io.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+reveals.forEach(el => io.observe(el));
+
+/* ─── Nav active state on scroll ─── */
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav-links a');
+
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => {
+    if (window.scrollY >= s.offsetTop - 100) current = s.id;
+  });
+  navLinks.forEach(a => {
+    a.style.color = a.getAttribute('href') === '#' + current
+      ? 'var(--text-primary)'
+      : '';
+  });
+});
+
+/* ─── Telegram form submission ─── */
+async function sendToTelegram(formId) {
+  let name, contact, company, format, count, game, message;
+
+  if (formId === 'main') {
+    name    = document.getElementById('cf-name').value.trim();
+    company = document.getElementById('cf-company').value.trim();
+    contact = document.getElementById('cf-contact').value.trim();
+    format  = document.getElementById('cf-format').value;
+    count   = document.getElementById('cf-count').value.trim();
+    game    = document.getElementById('cf-game').value;
+    message = document.getElementById('cf-message').value.trim();
+  } else {
+    name    = document.getElementById('sidebar-name').value.trim();
+    count   = document.getElementById('sidebar-count').value.trim();
+    game    = document.getElementById('sidebar-game').value;
+    message = document.getElementById('sidebar-message').value.trim();
+    contact = ''; company = ''; format = '';
+  }
+
+  if (!name) {
+    alert('Пожалуйста, укажите ваше имя.');
+    return;
+  }
+
+  const BOT_TOKEN = '8504479842:AAF6InVBOvw1PGD6RBlr6s7K9GNFsbvC3Cs';
+  const CHAT_ID   = '7437375018'; // ← замени после /start в боте
+
+  const parts = [
+    '🎯 <b>Новая заявка с сайта Tbilissimo</b>',
+    '',
+    name    ? `👤 <b>Имя:</b> ${name}`          : null,
+    company ? `🏢 <b>Компания:</b> ${company}`  : null,
+    contact ? `📱 <b>Контакт:</b> ${contact}`   : null,
+    format  ? `📍 <b>Формат:</b> ${format}`     : null,
+    count   ? `👥 <b>Участники:</b> ${count}`   : null,
+    game && game !== '' ? `🎮 <b>Игра:</b> ${game}` : null,
+    message ? `💬 <b>Сообщение:</b> ${message}` : null,
+  ].filter(Boolean).join('\n');
+
+  // Показываем лоадер на кнопке
+  const btn = document.querySelector(`[onclick="sendToTelegram('${formId}')"]`);
+  const originalText = btn ? btn.textContent : '';
+  if (btn) { btn.textContent = 'Отправляем...'; btn.disabled = true; }
+
+  try {
+    const res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        chat_id:    CHAT_ID,
+        text:       parts,
+        parse_mode: 'HTML'
+      })
+    });
+
+    const data = await res.json();
+
+    if (data.ok) {
+      if (formId === 'main') {
+        document.getElementById('contact-form-content').style.display = 'none';
+        document.getElementById('form-success').style.display = 'block';
+      } else {
+        if (btn) { btn.textContent = '✓ Заявка отправлена'; }
+        setTimeout(() => {
+          if (btn) { btn.textContent = originalText; btn.disabled = false; }
+        }, 3000);
+      }
+    } else {
+      throw new Error(data.description || 'Ошибка Telegram API');
+    }
+  } catch (err) {
+    console.error(err);
+    alert('Не удалось отправить заявку. Попробуйте ещё раз или напишите нам напрямую в Telegram.');
+    if (btn) { btn.textContent = originalText; btn.disabled = false; }
+  }
+}
+
+
+
+
+/* ─── Burger menu ─── */
+const burger = document.getElementById('burger');
+const mobileMenu = document.getElementById('mobile-menu');
+burger.addEventListener('click', () => {
+  burger.classList.toggle('open');
+  mobileMenu.classList.toggle('open');
+});
+function closeMobileMenu() {
+  burger.classList.remove('open');
+  mobileMenu.classList.remove('open');
+}
+// Close on outside click
+document.addEventListener('click', e => {
+  if (!burger.contains(e.target) && !mobileMenu.contains(e.target)) {
+    closeMobileMenu();
+  }
+});
+
+/* ─── Smooth scroll for nav ─── */
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const id = a.getAttribute('href');
+    if (id === '#') return;
+    const target = document.querySelector(id);
+    if (target) {
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+</script>
+</body>
+</html>
