@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SoftSkillsGames — Mafia & Cosmic Colonizers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Outfit:wght@200;300;400;500;600&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#06060e;--bg2:#0a0b16;--bg3:#0f1022;--surface:rgba(255,255,255,.03);--surface2:rgba(255,255,255,.06);--text:#e4e2f0;--text-m:#8b89a6;--text-d:#4e4d66;--cyan:#00e5ff;--cyan-d:rgba(0,229,255,.12);--mag:#ff2d78;--mag-d:rgba(255,45,120,.12);--gold:#ffd369;--vio:#a855f7;--brd:rgba(255,255,255,.06);--brd-h:rgba(255,255,255,.14);--glass:rgba(12,12,26,.72);--dsp:'Syne',sans-serif;--body:'Outfit',sans-serif;--mono:'Space Mono',monospace;--ease:cubic-bezier(.16,1,.3,1)}
+html{scroll-behavior:smooth;font-size:16px;overflow-x:hidden}
+body{font-family:var(--body);background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+::selection{background:var(--cyan);color:var(--bg)}a{color:inherit;text-decoration:none}button{font-family:inherit;cursor:pointer}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.7' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.022'/%3E%3C/svg%3E");pointer-events:none;z-index:10000}
+.ctn{max-width:1340px;margin:0 auto;padding:0 clamp(1.25rem,4vw,3.5rem)}
+#prog{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--mag),var(--cyan),var(--gold));z-index:10010;width:0}
+
+/* NAV */
+header{position:fixed;top:0;left:0;right:0;z-index:1000;padding:1rem 0;transition:background .5s,backdrop-filter .5s,border-color .5s;border-bottom:1px solid transparent}
+header.scrolled{background:var(--glass);backdrop-filter:blur(24px) saturate(1.4);-webkit-backdrop-filter:blur(24px) saturate(1.4);border-bottom-color:var(--brd)}
+header .ctn{display:flex;align-items:center;justify-content:space-between;gap:.6rem}
+.nav-logo{font-family:var(--dsp);font-weight:800;font-size:1.05rem;letter-spacing:-.02em;background:linear-gradient(135deg,var(--mag),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;white-space:nowrap}
+.nav-mid{display:flex;gap:1.6rem;align-items:center}
+.nav-mid a{font-family:var(--mono);font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-m);transition:color .3s;position:relative}
+.nav-mid a::after{content:'';position:absolute;bottom:-3px;left:0;width:0;height:1px;background:var(--cyan);transition:width .3s var(--ease)}
+.nav-mid a:hover{color:var(--text)}.nav-mid a:hover::after{width:100%}
+.nav-right{display:flex;align-items:center;gap:.7rem;flex-shrink:0}
+.lang-sw{display:flex;border:1px solid var(--brd);overflow:hidden;flex-shrink:0}
+.lang-b{font-family:var(--mono);font-size:.55rem;letter-spacing:.06em;padding:.28rem .6rem;background:transparent;border:none;color:var(--text-d);transition:background .3s,color .3s;text-transform:uppercase}
+.lang-b.active{background:var(--surface2);color:var(--text)}.lang-b:hover{color:var(--text)}
+.nav-cta{font-family:var(--mono);font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;padding:.42rem 1.1rem;border:1px solid var(--mag);color:var(--mag);background:transparent;transition:background .3s,color .3s,box-shadow .3s}
+.nav-cta:hover{background:var(--mag);color:#fff;box-shadow:0 0 25px rgba(255,45,120,.2)}
+.mob-tog{display:none;background:none;border:none;color:var(--text);font-size:1.3rem}
+
+/* HERO */
+.hero{position:relative;min-height:100vh;display:flex;align-items:center;overflow:hidden}
+.h-bg{position:absolute;inset:-15%;background:radial-gradient(ellipse 80% 60% at 30% 40%,rgba(180,0,80,.12),transparent),radial-gradient(ellipse 60% 50% at 70% 60%,rgba(0,80,200,.08),transparent),radial-gradient(ellipse 100% 80% at 50% 50%,rgba(6,6,14,1),rgba(6,6,14,.95));z-index:1;will-change:transform}
+.h-stars{position:absolute;inset:-15%;z-index:2;will-change:transform}
+.star{position:absolute;border-radius:50%;background:#fff;animation:tw var(--d) ease-in-out infinite alternate}
+@keyframes tw{0%{opacity:.15}100%{opacity:1}}
+.h-mid{position:absolute;inset:0;z-index:3;will-change:transform;pointer-events:none}
+.neb{position:absolute;border-radius:50%;filter:blur(80px);opacity:.25}
+.neb:nth-child(1){width:500px;height:500px;top:8%;right:-5%;background:var(--mag)}
+.neb:nth-child(2){width:400px;height:400px;bottom:5%;left:-8%;background:var(--cyan)}
+.neb:nth-child(3){width:260px;height:260px;top:45%;left:38%;background:var(--vio)}
+.hero-ct{position:relative;z-index:10;max-width:840px;padding:10rem 0 5rem;will-change:transform,opacity}
+.hero-tag{font-family:var(--mono);font-size:.66rem;letter-spacing:.25em;text-transform:uppercase;color:var(--mag);margin-bottom:1.3rem;display:inline-flex;align-items:center;gap:.7rem;opacity:0;transform:translateY(30px)}
+.hero-tag::before{content:'';width:28px;height:1px;background:var(--mag)}
+.hero-ct h1{font-family:var(--dsp);font-size:clamp(2.5rem,6vw,5.2rem);font-weight:800;line-height:1.06;letter-spacing:-.04em;margin-bottom:1.5rem;opacity:0;transform:translateY(40px)}
+.gt{background:linear-gradient(135deg,var(--mag),var(--cyan),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-desc{font-size:1.08rem;color:var(--text-m);max-width:540px;line-height:1.75;margin-bottom:2rem;font-weight:300;opacity:0;transform:translateY(40px)}
+.hero-btns{display:flex;gap:1.1rem;flex-wrap:wrap;opacity:0;transform:translateY(40px)}
+.bn{font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;padding:.9rem 2.3rem;border:none;position:relative;overflow:hidden;transition:transform .3s var(--ease),box-shadow .3s;display:inline-block}
+.bn-m{background:linear-gradient(135deg,var(--mag),#d4145a);color:#fff}.bn-m:hover{transform:translateY(-3px);box-shadow:0 8px 35px rgba(255,45,120,.3)}
+.bn-m::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,transparent,rgba(255,255,255,.18),transparent);transform:translateX(-100%);transition:transform .5s}.bn-m:hover::before{transform:translateX(100%)}
+.bn-o{background:transparent;color:var(--text-m);border:1px solid var(--brd-h)}.bn-o:hover{color:var(--text);border-color:var(--text-m);transform:translateY(-2px)}
+.hero-metrics{display:flex;gap:clamp(1.8rem,4vw,4.5rem);margin-top:4rem;padding-top:2.2rem;border-top:1px solid var(--brd);opacity:0;transform:translateY(40px)}
+.mv{font-family:var(--dsp);font-size:clamp(1.6rem,3vw,2.5rem);font-weight:700;background:linear-gradient(135deg,var(--mag),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1}
+.ml{font-family:var(--mono);font-size:.52rem;letter-spacing:.15em;text-transform:uppercase;color:var(--text-d);margin-top:.3rem}
+
+/* TRUST */
+.trust{padding:3rem 0;border-top:1px solid var(--brd);border-bottom:1px solid var(--brd)}
+.trust-label{font-family:var(--mono);font-size:.55rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text-d);text-align:center;margin-bottom:1.6rem}
+.trust-logos{display:flex;justify-content:center;gap:clamp(1.5rem,4vw,4rem);flex-wrap:wrap;align-items:center}
+.trust-logos span{font-family:var(--dsp);font-size:1rem;font-weight:600;color:var(--text-d);transition:color .3s}
+.trust-logos span:hover{color:var(--text-m)}
+
+/* SECTION */
+.sec{padding:clamp(4.5rem,10vw,9rem) 0;position:relative}
+.si{font-family:var(--mono);font-size:.55rem;letter-spacing:.25em;text-transform:uppercase;color:var(--text-d);margin-bottom:.7rem}
+.sh{font-family:var(--dsp);font-size:clamp(2rem,4vw,3.4rem);font-weight:700;line-height:1.1;letter-spacing:-.03em;margin-bottom:1rem}
+.ss{font-size:1rem;color:var(--text-m);max-width:540px;line-height:1.75;font-weight:300}
+.sr{opacity:0;transform:translateY(42px);transition:opacity .85s var(--ease),transform .85s var(--ease)}
+.sr.vis{opacity:1;transform:translateY(0)}.sd1{transition-delay:.1s}.sd2{transition-delay:.2s}.sd3{transition-delay:.3s}.sd4{transition-delay:.4s}
+
+/* BADGE */
+.gbadge{display:inline-flex;align-items:center;gap:.5rem;font-family:var(--mono);font-size:.55rem;letter-spacing:.18em;text-transform:uppercase;padding:.4rem 1rem;margin-bottom:1.6rem}
+.gbadge::before{content:'';width:6px;height:6px;border-radius:50%;animation:pdot 2s ease-in-out infinite}
+@keyframes pdot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
+.gb-m{color:var(--mag);border:1px solid var(--mag-d);background:rgba(255,45,120,.04)}.gb-m::before{background:var(--mag)}
+.gb-c{color:var(--cyan);border:1px solid var(--cyan-d);background:rgba(0,229,255,.04)}.gb-c::before{background:var(--cyan)}
+.gh{font-family:var(--dsp);font-size:clamp(2rem,4.5vw,3.6rem);font-weight:800;line-height:1.08;letter-spacing:-.04em;margin-bottom:1rem}
+.gd{font-size:1rem;color:var(--text-m);max-width:600px;margin:0 auto;line-height:1.75;font-weight:300}
+
+/* MAFIA SECTION — no sticky/spacer, normal flow */
+.maf-wrap{position:relative;background:linear-gradient(180deg,var(--bg) 0%,#120810 30%,#0e0608 100%);padding:clamp(4.5rem,10vw,9rem) 0}
+.maf-sticky{display:flex;align-items:center;overflow:hidden}
+.maf-spacer{display:none}
+.m-lt{position:absolute;border-radius:50%;filter:blur(120px);pointer-events:none;opacity:.14}
+.maf-inner{position:relative;z-index:4;width:100%}
+
+/* Mafia phase cards */
+.m-phases{position:relative;margin-top:2rem}
+.m-phase{display:none;grid-template-columns:repeat(3,1fr);gap:1.3rem}
+.m-phase.active{display:grid;animation:phaseIn .45s var(--ease) both}
+@keyframes phaseIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.m-pc{border:1px solid var(--brd);padding:2rem 1.6rem;background:var(--surface);transition:border-color .4s,transform .5s var(--ease),box-shadow .5s;position:relative;overflow:hidden}
+.m-pc:hover{border-color:var(--mag);transform:translateY(-5px);box-shadow:0 14px 45px rgba(255,45,120,.06)}
+.m-pc::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--mag),transparent);opacity:0;transition:opacity .4s}
+.m-pc:hover::after{opacity:1}
+.m-pc .ic{font-size:1.8rem;margin-bottom:.8rem}
+.m-pc h4{font-family:var(--dsp);font-size:1rem;font-weight:600;margin-bottom:.4rem}
+.m-pc p{font-size:.82rem;color:var(--text-m);line-height:1.55}
+.m-dots{display:flex;gap:.4rem;justify-content:center;margin-top:2rem}
+.m-dot{width:28px;height:3px;background:var(--brd-h);border:none;padding:0;transition:background .4s,width .4s}
+.m-dot.active{background:var(--mag);width:44px}
+.m-tags{display:flex;flex-wrap:wrap;gap:.4rem;justify-content:center;margin-top:1.6rem}
+.m-tag{font-family:var(--mono);font-size:.55rem;letter-spacing:.08em;padding:.35rem .8rem;border:1px solid var(--brd);color:var(--text-m);transition:border-color .3s,color .3s}
+.m-tag:hover{border-color:var(--mag);color:var(--mag)}
+
+/* STORY DIV */
+.sdiv{padding:4.5rem 0;text-align:center;position:relative;overflow:hidden}
+.sdiv::before{content:'';position:absolute;top:50%;left:50%;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(168,85,247,.04),transparent 70%);transform:translate(-50%,-50%)}
+.sq{font-family:var(--dsp);font-size:clamp(1.3rem,2.5vw,2rem);font-weight:500;font-style:italic;line-height:1.4;max-width:640px;margin:0 auto;background:linear-gradient(135deg,var(--text-m),var(--text));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.sa{font-family:var(--mono);font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;color:var(--text-d);margin-top:1rem}
+
+/* COSMIC */
+.cosmic-sec{position:relative;overflow:hidden;background:linear-gradient(180deg,var(--bg) 0%,#080820 40%,#0a0a22 100%)}
+.cosmic-sec::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:1px;height:100%;background:linear-gradient(180deg,transparent,var(--cyan-d),var(--cyan-d),transparent);opacity:.35}
+.c-glow{position:absolute;border-radius:50%;filter:blur(120px);pointer-events:none;animation:cfl 8s ease-in-out infinite alternate}
+@keyframes cfl{0%{transform:translate(0,0)}100%{transform:translate(12px,-18px)}}
+.c-build{display:grid;grid-template-columns:repeat(4,1fr);gap:1.2rem;margin-top:3rem;position:relative;z-index:2}
+.c-blk{border:1px solid var(--brd);padding:1.6rem 1.3rem;background:var(--surface);transition:border-color .4s,transform .5s var(--ease),box-shadow .5s;position:relative;overflow:hidden}
+.c-blk:hover{border-color:var(--cyan);transform:translateY(-5px);box-shadow:0 14px 45px rgba(0,229,255,.06)}
+.c-blk::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--cyan),transparent);opacity:0;transition:opacity .4s}
+.c-blk:hover::after{opacity:1}
+.c-blk .ic{font-size:1.6rem;margin-bottom:.7rem}
+.c-blk h4{font-family:var(--dsp);font-size:.95rem;font-weight:600;margin-bottom:.35rem}
+.c-blk p{font-size:.8rem;color:var(--text-m);line-height:1.5}
+.c-feats{display:grid;grid-template-columns:1fr 1fr;gap:3rem;margin-top:3.5rem;position:relative;z-index:2}
+.c-feats h3{font-family:var(--dsp);font-size:1.1rem;font-weight:600;margin-bottom:1rem;color:var(--cyan)}
+.c-feats li{list-style:none;font-size:.85rem;color:var(--text-m);padding:.4rem 0 .4rem 1.2rem;position:relative;line-height:1.5}
+.c-feats li::before{content:'›';position:absolute;left:0;color:var(--cyan);font-family:var(--mono);font-weight:700}
+
+/* CALC */
+.calc-sec{background:linear-gradient(180deg,var(--bg) 0%,var(--bg2) 100%);border-top:1px solid var(--brd);border-bottom:1px solid var(--brd)}
+.calc-box{max-width:640px;margin:3rem auto 0;border:1px solid var(--brd);padding:clamp(1.8rem,3.5vw,2.8rem);background:var(--surface);position:relative;overflow:hidden}
+.calc-box::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--mag),var(--cyan))}
+.calc-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem}
+.calc-fg label{font-family:var(--mono);font-size:.52rem;letter-spacing:.14em;text-transform:uppercase;color:var(--text-d);display:block;margin-bottom:.35rem}
+.calc-fg select,.calc-fg input[type=number]{width:100%;padding:.75rem .9rem;background:var(--bg);border:1px solid var(--brd);color:var(--text);font-family:var(--body);font-size:.85rem;outline:none;transition:border-color .3s}
+.calc-fg select:focus,.calc-fg input:focus{border-color:var(--cyan)}
+.calc-fg select{cursor:pointer;appearance:none}
+.calc-fg.full{grid-column:1/-1}
+.calc-pn{font-family:var(--dsp);font-size:2.2rem;font-weight:700;text-align:center;margin-bottom:.1rem;transition:color .3s}
+.calc-pn.clr-m{color:var(--mag)}.calc-pn.clr-c{color:var(--cyan)}
+.calc-slider{-webkit-appearance:none;appearance:none;width:100%;height:4px;border-radius:2px;background:var(--brd);outline:none;margin:.5rem 0}
+.calc-slider::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;cursor:pointer;border:2px solid var(--bg);transition:background .3s,box-shadow .3s}
+.calc-slider.th-m::-webkit-slider-thumb{background:var(--mag);box-shadow:0 0 10px rgba(255,45,120,.3)}
+.calc-slider.th-c::-webkit-slider-thumb{background:var(--cyan);box-shadow:0 0 10px rgba(0,229,255,.3)}
+.calc-slider::-moz-range-thumb{width:18px;height:18px;border-radius:50%;cursor:pointer;border:2px solid var(--bg)}
+.calc-result{margin-top:1.3rem;padding-top:1.3rem;border-top:1px solid var(--brd);text-align:center}
+.calc-total{font-family:var(--dsp);font-size:clamp(2.2rem,4.5vw,3.2rem);font-weight:800;line-height:1;margin-bottom:.5rem;transition:color .3s}
+.calc-total.clr-m{background:linear-gradient(135deg,var(--mag),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.calc-total.clr-c{background:linear-gradient(135deg,var(--cyan),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.calc-detail{font-size:.85rem;color:var(--text-m);line-height:1.6}.calc-detail strong{color:var(--text)}
+
+/* CUSTOM */
+.cust-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;margin-top:3rem;background:var(--brd)}
+.cust-card{background:var(--bg);padding:clamp(1.4rem,2.5vw,2.2rem);transition:background .4s}.cust-card:hover{background:var(--bg2)}
+.cust-num{font-family:var(--mono);font-size:.5rem;letter-spacing:.2em;color:var(--text-d);margin-bottom:.7rem}
+.cust-card h4{font-family:var(--dsp);font-size:1rem;font-weight:600;margin-bottom:.4rem}
+.cust-card p{font-size:.8rem;color:var(--text-m);line-height:1.5}
+
+/* WHY */
+.why-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:3rem;border:1px solid var(--brd)}
+.why-c{padding:clamp(1.3rem,2.2vw,2.2rem) clamp(.9rem,1.6vw,1.6rem);border-right:1px solid var(--brd);transition:background .4s}
+.why-c:last-child{border-right:none}.why-c:hover{background:var(--surface)}
+.why-v{font-family:var(--dsp);font-size:clamp(1.6rem,2.8vw,2.4rem);font-weight:800;line-height:1;margin-bottom:.3rem;background:linear-gradient(135deg,var(--mag),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.why-l{font-family:var(--mono);font-size:.52rem;letter-spacing:.15em;text-transform:uppercase;color:var(--text-d);margin-bottom:.7rem}
+.why-t{font-size:.8rem;color:var(--text-m);line-height:1.5}
+
+/* PROC */
+.proc{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:3rem;position:relative}
+.proc::before{content:'';position:absolute;top:1.6rem;left:10%;right:10%;height:1px;background:linear-gradient(90deg,transparent,var(--brd-h),var(--brd-h),transparent)}
+.proc-s{text-align:center;padding:0 1rem}
+.proc-n{font-family:var(--dsp);font-size:2rem;font-weight:800;line-height:1;background:linear-gradient(135deg,var(--cyan),var(--vio));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:.9rem;position:relative;z-index:2;display:inline-block}
+.proc-t{font-family:var(--dsp);font-size:.9rem;font-weight:600;margin-bottom:.3rem}
+.proc-d{font-size:.78rem;color:var(--text-m);line-height:1.5}
+
+/* FAQ */
+.faq-list{margin-top:3rem;max-width:700px}
+.faq-i{border-bottom:1px solid var(--brd)}
+.faq-q{width:100%;background:none;border:none;color:var(--text);font-family:var(--body);font-size:.92rem;text-align:left;padding:1.1rem 0;display:flex;justify-content:space-between;align-items:center;transition:color .3s}
+.faq-q:hover{color:var(--cyan)}
+.faq-q .ico{font-family:var(--mono);font-size:1rem;color:var(--text-d);transition:transform .4s var(--ease),color .3s;flex-shrink:0;margin-left:.8rem}
+.faq-i.open .faq-q .ico{transform:rotate(45deg);color:var(--cyan)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .5s var(--ease)}
+.faq-i.open .faq-a{max-height:200px}
+.faq-a p{padding-bottom:1.1rem;color:var(--text-m);font-size:.88rem;line-height:1.7}
+
+/* CONTACT */
+.ct-sec{padding:clamp(4.5rem,10vw,9rem) 0;border-top:1px solid var(--brd);position:relative;overflow:hidden}
+.ct-sec::before{content:'';position:absolute;bottom:-180px;left:50%;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(255,45,120,.03),transparent 60%);transform:translateX(-50%);pointer-events:none}
+.ct-split{display:grid;grid-template-columns:1fr 1fr;gap:4rem;margin-top:3rem;position:relative;z-index:2}
+.c-links{display:flex;flex-direction:column;gap:.9rem}
+.c-lnk{display:flex;align-items:center;justify-content:space-between;padding:1.3rem 1.4rem;border:1px solid var(--brd);transition:border-color .3s,transform .3s var(--ease)}
+.c-lnk:hover{border-color:var(--mag);transform:translateX(6px)}
+.c-lnk h4{font-family:var(--dsp);font-size:.95rem;font-weight:500;margin-bottom:.1rem}.c-lnk p{font-size:.72rem;color:var(--text-m)}
+.c-lnk .arr{font-size:.95rem;color:var(--mag);transition:transform .3s var(--ease)}.c-lnk:hover .arr{transform:translateX(3px)}
+.c-form{display:flex;flex-direction:column;gap:1rem}
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.fg label{font-family:var(--mono);font-size:.5rem;letter-spacing:.14em;text-transform:uppercase;color:var(--text-d);display:block;margin-bottom:.3rem}
+.fg input,.fg select,.fg textarea{width:100%;padding:.75rem .85rem;background:var(--surface);border:1px solid var(--brd);color:var(--text);font-family:var(--body);font-size:.85rem;outline:none;transition:border-color .3s,box-shadow .3s}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--cyan);box-shadow:0 0 0 3px var(--cyan-d)}
+.fg select{cursor:pointer;appearance:none}.fg textarea{resize:vertical;min-height:75px}
+.btn-sub{font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;padding:.95rem 2.3rem;background:linear-gradient(135deg,var(--mag),#d4145a);color:#fff;border:none;align-self:flex-start;transition:transform .3s var(--ease),box-shadow .3s;position:relative;overflow:hidden}
+.btn-sub:hover{transform:translateY(-3px);box-shadow:0 8px 35px rgba(255,45,120,.3)}
+
+/* FOOTER */
+footer{border-top:1px solid var(--brd);padding:2.5rem 0}
+.f-inner{display:flex;justify-content:space-between;align-items:flex-start}
+.f-logo{font-family:var(--dsp);font-weight:800;font-size:.9rem;background:linear-gradient(135deg,var(--mag),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:.25rem}
+.f-copy{font-size:.7rem;color:var(--text-d)}
+.f-nav{display:flex;gap:1.6rem}
+.f-nav a{font-family:var(--mono);font-size:.52rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-d);transition:color .3s}.f-nav a:hover{color:var(--text)}
+
+/* RESP */
+@media(max-width:1024px){.c-build{grid-template-columns:1fr 1fr}.why-grid{grid-template-columns:1fr 1fr}.why-c{border-bottom:1px solid var(--brd)}.proc{grid-template-columns:1fr 1fr;gap:1.5rem}.proc::before{display:none}.cust-grid{grid-template-columns:1fr 1fr}.ct-split{grid-template-columns:1fr;gap:2.5rem}.c-feats{grid-template-columns:1fr}.m-phase{grid-template-columns:1fr 1fr}.calc-row{grid-template-columns:1fr}}
+@media(max-width:768px){.nav-mid{display:none}.mob-tog{display:block}header.mob-open .nav-mid{display:flex;flex-direction:column;position:absolute;top:100%;left:0;right:0;background:var(--glass);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);padding:1.5rem clamp(1.25rem,4vw,3.5rem);border-bottom:1px solid var(--brd);gap:1rem}.c-build{grid-template-columns:1fr}.why-grid{grid-template-columns:1fr}.why-c{border-right:none}.proc{grid-template-columns:1fr}.cust-grid{grid-template-columns:1fr}.m-phase{grid-template-columns:1fr}.fr{grid-template-columns:1fr}.hero-metrics{flex-wrap:wrap;gap:1.3rem}.f-inner{flex-direction:column;gap:1.3rem}[style*="grid-template-columns:repeat(3,1fr)"]{grid-template-columns:1fr!important}}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+<header id="hdr"><div class="ctn">
+<a href="#hero" class="nav-logo">SoftSkillsGames</a>
+<nav class="nav-mid" id="navMid">
+<a href="#mafia" data-i18n="nav_mafia">Mafia</a>
+<a href="#cosmic" data-i18n="nav_cosmic">Cosmic Colonizers</a>
+<a href="#calc" data-i18n="nav_calc">Calculator</a>
+<a href="#customize" data-i18n="nav_custom">Customize</a>
+<a href="#faq">FAQ</a>
+<a href="#contact" class="nav-cta" data-i18n="nav_cta">Get in touch</a>
+</nav>
+<div class="nav-right">
+<div class="lang-sw"><button class="lang-b active" data-lang="en">EN</button><button class="lang-b" data-lang="ru">RU</button></div>
+<button class="mob-tog" id="mobBtn" aria-label="Menu">☰</button>
+</div>
+</div></header>
+
+<main>
+<section class="hero" id="hero">
+<div class="h-bg" data-pd="0.15"></div><div class="h-stars" id="sf" data-pd="0.1"></div>
+<div class="h-mid" data-pd="0.3"><div class="neb"></div><div class="neb"></div><div class="neb"></div></div>
+<div class="ctn"><div class="hero-ct" id="heroCt">
+<div class="hero-tag" data-ha="1" data-i18n="hero_tag">Premium Team Building</div>
+<h1 data-ha="2"><span data-i18n="hero_h1_1">Games that forge</span><br><span class="gt" data-i18n="hero_h1_2">unstoppable teams</span></h1>
+<p class="hero-desc" data-ha="3" data-i18n="hero_desc">Mafia: social deduction, psychology, bluff. Cosmic Colonizers: strategy, survival, crisis management. Two games, one result — a team that truly works together.</p>
+<div class="hero-btns" data-ha="4"><a href="#contact" class="bn bn-m" data-i18n="hero_cta">Book a session</a><a href="#mafia" class="bn bn-o" data-i18n="hero_cta2">Explore games</a></div>
+<div class="hero-metrics" data-ha="5">
+<div><div class="mv" data-count="10">0</div><div class="ml" data-i18n="m_years">Years of craft</div></div>
+<div><div class="mv" data-count="500">0</div><div class="ml" data-i18n="m_events">Events delivered</div></div>
+<div><div class="mv" data-count="60">0</div><div class="ml" data-i18n="m_players">Players per session</div></div>
+</div>
+</div></div>
+</section>
+
+<div class="trust"><div class="trust-label" data-i18n="trust_label">Trusted by leading teams</div>
+<div class="trust-logos"><span>Revolut</span><span>Pipedrive</span><span>Bolt</span><span>Miro</span><span>JetBrains</span><span>Wise</span></div></div>
+
+<!-- MAFIA -->
+<div class="maf-wrap" id="mafia">
+<div class="maf-sticky">
+<div class="m-lt" style="width:500px;height:500px;top:10%;left:-10%;background:var(--mag)"></div>
+<div class="m-lt" style="width:350px;height:350px;bottom:0;right:-5%;background:rgba(255,100,50,.12)"></div>
+<div class="maf-inner ctn">
+<div class="mafia-header sr" style="text-align:center">
+<div class="gbadge gb-m" data-i18n="mafia_badge">Psychology · Bluff · Deduction</div>
+<h2 class="gh"><span data-i18n="mafia_h1">The art of </span><span style="color:var(--mag)" data-i18n="mafia_h2">Mafia</span></h2>
+<p class="gd" data-i18n="mafia_desc">The ultimate social deduction game. Read people, build alliances, expose liars. Up to 60 players across parallel tables with a professional host.</p>
+</div>
+<div class="m-phases" id="mPhases">
+<div class="m-phase active" data-phase="0">
+<div class="m-pc" data-tilt><div class="ic">🎭</div><h4 data-i18n="mf_c1h">Professional Host</h4><p data-i18n="mf_c1p">Experienced game masters controlling pacing, tension, and energy.</p></div>
+<div class="m-pc" data-tilt><div class="ic">🔍</div><h4 data-i18n="mf_c2h">Tailored Scenarios</h4><p data-i18n="mf_c2p">Difficulty and narrative adapted to your team size and goals.</p></div>
+<div class="m-pc" data-tilt><div class="ic">🏆</div><h4 data-i18n="mf_c3h">Debrief & Highlights</h4><p data-i18n="mf_c3p">Post-game analysis, key moments, and awards for standout players.</p></div>
+</div>
+<div class="m-phase" data-phase="1">
+<div class="m-pc" data-tilt><div class="ic">💻</div><h4 data-i18n="mf_f1h">Online via Discord</h4><p data-i18n="mf_f1p">Distributed teams across cities. Full tech support during the game.</p></div>
+<div class="m-pc" data-tilt><div class="ic">🎲</div><h4 data-i18n="mf_f2h">Offline with Props</h4><p data-i18n="mf_f2p">On-site host with cards, equipment, and decor. Just provide a room.</p></div>
+<div class="m-pc" data-tilt><div class="ic">🌍</div><h4 data-i18n="mf_f3h">Bilingual: RU & EN</h4><p data-i18n="mf_f3p">Full sessions in English or Russian for multinational teams.</p></div>
+</div>
+<div class="m-phase" data-phase="2">
+<div class="m-pc" data-tilt><div class="ic">🎨</div><h4 data-i18n="mf_e1h">Branded Materials</h4><p data-i18n="mf_e1p">Custom cards, certificates, and assets in your company style.</p></div>
+<div class="m-pc" data-tilt><div class="ic">⚔️</div><h4 data-i18n="mf_e2h">Tournament Mode</h4><p data-i18n="mf_e2p">Multi-round format with leaderboards and a final showdown.</p></div>
+<div class="m-pc" data-tilt><div class="ic">📊</div><h4 data-i18n="mf_e3h">HR Analytics</h4><p data-i18n="mf_e3p">Post-event report on leadership, communication, team dynamics.</p></div>
+</div>
+</div>
+<div class="m-dots" id="mDots"><button class="m-dot active" data-idx="0"></button><button class="m-dot" data-idx="1"></button><button class="m-dot" data-idx="2"></button></div>
+<div class="m-tags sr sd2">
+<span class="m-tag">Discord / Offline</span><span class="m-tag" data-i18n="mt_players">12–60 players</span><span class="m-tag" data-i18n="mt_hours">1.5–3 hours</span><span class="m-tag">RU + EN</span><span class="m-tag" data-i18n="mt_tables">Parallel tables</span><span class="m-tag" data-i18n="mt_props">Props included</span>
+</div>
+</div>
+</div>
+<div class="maf-spacer" id="mafSpacer"></div>
+</div>
+
+<!-- Mafia moments / micro-cases block — fills the narrative gap before Cosmic -->
+<section class="sec" style="background:linear-gradient(180deg,#120810 0%,var(--bg) 100%);border-top:1px solid var(--brd)">
+<div class="ctn">
+<div style="text-align:center;margin-bottom:3rem" class="sr">
+<div class="si" data-i18n="maf_moments_idx">Real sessions</div>
+<h2 class="sh sd1" style="text-align:center" data-i18n="maf_moments_h">What happens at the table</h2>
+<p class="ss sd2" style="margin:0 auto;text-align:center;max-width:520px" data-i18n="maf_moments_d">Every game is different. Every game leaves a mark.</p>
+</div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-bottom:3rem" class="sr sd2">
+<div style="border:1px solid var(--brd);padding:2rem 1.6rem;background:var(--surface);position:relative;overflow:hidden">
+<div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--mag),transparent)"></div>
+<div style="font-size:1.6rem;margin-bottom:1rem">🕵️</div>
+<h4 style="font-family:var(--dsp);font-size:.95rem;font-weight:600;margin-bottom:.5rem;color:var(--text)" data-i18n="maf_m1h">The unmasking</h4>
+<p style="font-size:.82rem;color:var(--text-m);line-height:1.6" data-i18n="maf_m1p">A VP of Engineering got voted out in round two — turned out he was the best liar in the room. The team had never seen that side of him.</p>
+</div>
+<div style="border:1px solid var(--brd);padding:2rem 1.6rem;background:var(--surface);position:relative;overflow:hidden">
+<div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--mag),transparent)"></div>
+<div style="font-size:1.6rem;margin-bottom:1rem">🤝</div>
+<h4 style="font-family:var(--dsp);font-size:.95rem;font-weight:600;margin-bottom:.5rem;color:var(--text)" data-i18n="maf_m2h">Trust rebuilt</h4>
+<p style="font-size:.82rem;color:var(--text-m);line-height:1.6" data-i18n="maf_m2p">After a difficult merger, two departments sat at one table. By the final round, they were defending each other. The HR lead called it a turning point.</p>
+</div>
+<div style="border:1px solid var(--brd);padding:2rem 1.6rem;background:var(--surface);position:relative;overflow:hidden">
+<div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--mag),transparent)"></div>
+<div style="font-size:1.6rem;margin-bottom:1rem">⚡</div>
+<h4 style="font-family:var(--dsp);font-size:.95rem;font-weight:600;margin-bottom:.5rem;color:var(--text)" data-i18n="maf_m3h">The quiet leader</h4>
+<p style="font-size:.82rem;color:var(--text-m);line-height:1.6" data-i18n="maf_m3p">She barely spoke in meetings. In Mafia, she read the room perfectly and steered 40 people to victory. Her manager noticed — and things changed.</p>
+</div>
+</div>
+<div class="sdiv sr" style="padding:0;border:none;background:none">
+<p class="sq" data-i18n="story_q">"The best team-building doesn't feel like team-building. It feels like a story you survived together."</p>
+<p class="sa" data-i18n="story_a">— The philosophy behind every session</p>
+</div>
+</div>
+</section>
+
+<!-- COSMIC -->
+<section class="sec cosmic-sec" id="cosmic">
+<div class="c-glow" style="width:420px;height:420px;top:-10%;right:-8%;background:rgba(0,229,255,.04)"></div>
+<div class="c-glow" style="width:280px;height:280px;bottom:5%;left:5%;background:rgba(168,85,247,.03);animation-delay:3s"></div>
+<div class="ctn">
+<div style="text-align:center" class="sr">
+<div class="gbadge gb-c" data-i18n="cosmic_badge">Strategy · Survival · Cooperation</div>
+<h2 class="gh"><span data-i18n="cosmic_h1">Meet </span><span style="color:var(--cyan)" data-i18n="cosmic_h2">Cosmic Colonizers</span></h2>
+<p class="gd" data-i18n="cosmic_desc">Earth is dying. Your team is humanity's last expedition. Build a colony, manage resources, survive catastrophes, and construct the Space Press.</p>
+</div>
+<div class="c-build" id="cBuild">
+<div class="c-blk sr sd1" data-tilt><div class="ic">🏗️</div><h4 data-i18n="cc_b1h">Colony Construction</h4><p data-i18n="cc_b1p">Erect buildings, develop infrastructure, expand your outpost.</p></div>
+<div class="c-blk sr sd2" data-tilt><div class="ic">⚡</div><h4 data-i18n="cc_b2h">Resource Management</h4><p data-i18n="cc_b2p">Balance energy, food, and metal under deficit pressure.</p></div>
+<div class="c-blk sr sd3" data-tilt><div class="ic">🌪️</div><h4 data-i18n="cc_b3h">Risk & Crisis</h4><p data-i18n="cc_b3p">React to cataclysms, epidemics, and mutinies in real time.</p></div>
+<div class="c-blk sr sd4" data-tilt><div class="ic">📦</div><h4 data-i18n="cc_b4h">Trade & Strategy</h4><p data-i18n="cc_b4p">Exchange resources, plan development, outmaneuver rivals.</p></div>
+</div>
+<div class="c-feats sr sd2">
+<div><h3 data-i18n="cc_f1h">Why it works</h3><ul><li data-i18n="cc_f1a">Real leadership under pressure</li><li data-i18n="cc_f1b">Cross-team communication tested</li><li data-i18n="cc_f1c">Accountability for every decision</li><li data-i18n="cc_f1d">Fresh social dynamics emerge</li></ul></div>
+<div><h3 data-i18n="cc_f2h">What you get</h3><ul><li data-i18n="cc_f2a">HR analytics report post-game</li><li data-i18n="cc_f2b">Unforgettable shared experience</li><li data-i18n="cc_f2c">8–30 players, 3–4 hours</li><li data-i18n="cc_f2d">Online or offline, RU & EN</li></ul></div>
+</div>
+</div>
+</section>
+
+<!-- CALCULATOR -->
+<section class="sec calc-sec" id="calc">
+<div class="ctn">
+<div class="si sr" data-i18n="calc_idx">Pricing</div>
+<h2 class="sh sr sd1"><span data-i18n="calc_h1">Cost </span><span style="color:var(--cyan)" data-i18n="calc_h2">calculator</span></h2>
+<p class="ss sr sd2" data-i18n="calc_desc">Select a game, format, and number of players to get an instant estimate.</p>
+<div class="calc-box sr sd3">
+<div class="calc-row">
+<div class="calc-fg"><label data-i18n="calc_game_l">Game</label><select id="calcGame"><option value="mafia" data-i18n="calc_game_m">Mafia</option><option value="cosmic" data-i18n="calc_game_c">Cosmic Colonizers</option></select></div>
+<div class="calc-fg"><label data-i18n="calc_format_l">Format</label><select id="calcFmt"><option value="online" data-i18n="calc_fmt_on">Online</option><option value="offline" data-i18n="calc_fmt_off">Offline</option></select></div>
+</div>
+<div class="calc-fg full">
+<label data-i18n="calc_players_l">Number of players</label>
+<div class="calc-pn clr-m" id="calcNum">12</div>
+<input type="range" class="calc-slider th-m" id="calcSlider" min="1" max="120" value="12">
+</div>
+<div class="calc-result"><div class="calc-total clr-m" id="calcTotal">$100</div><p class="calc-detail" id="calcDetail"></p></div>
+</div>
+</div>
+</section>
+
+<!-- CUSTOM -->
+<section class="sec" id="customize">
+<div class="ctn">
+<div class="si sr" data-i18n="cust_idx">Customization</div>
+<h2 class="sh sr sd1"><span data-i18n="cust_h1">Tailored to </span><span style="color:var(--gold)" data-i18n="cust_h2">your brand</span></h2>
+<p class="ss sr sd2" data-i18n="cust_desc">Every session is a blank canvas. We adapt visuals, roles, narrative, and mechanics to your identity.</p>
+<div class="cust-grid sr sd3">
+<div class="cust-card"><div class="cust-num">01</div><h4 data-i18n="cu_1h">Visual Identity</h4><p data-i18n="cu_1p">Cards and presentations in your brand colors.</p></div>
+<div class="cust-card"><div class="cust-num">02</div><h4 data-i18n="cu_2h">Roles & Characters</h4><p data-i18n="cu_2p">Roles mirror your org structure.</p></div>
+<div class="cust-card"><div class="cust-num">03</div><h4 data-i18n="cu_3h">Narrative Arc</h4><p data-i18n="cu_3p">Scenarios around your business reality.</p></div>
+<div class="cust-card"><div class="cust-num">04</div><h4 data-i18n="cu_4h">HR Integration</h4><p data-i18n="cu_4p">Embed trust, leadership, decision-making goals.</p></div>
+<div class="cust-card"><div class="cust-num">05</div><h4 data-i18n="cu_5h">Branded Deliverables</h4><p data-i18n="cu_5p">Everything carries your logo.</p></div>
+<div class="cust-card"><div class="cust-num">06</div><h4 data-i18n="cu_6h">Tournament Mode</h4><p data-i18n="cu_6p">Leaderboards and final showdown.</p></div>
+</div>
+</div>
+</section>
+
+<!-- WHY -->
+<section class="sec" id="why">
+<div class="ctn">
+<div class="si sr" data-i18n="why_idx">Why us</div>
+<h2 class="sh sr sd1"><span data-i18n="why_h1">Built on </span><span style="color:var(--gold)" data-i18n="why_h2">experience</span></h2>
+<div class="why-grid sr sd2">
+<div class="why-c"><div class="why-v">10+</div><div class="why-l" data-i18n="wy_1l">Years</div><div class="why-t" data-i18n="wy_1t">Since 2013. Formats refined to the highest standard.</div></div>
+<div class="why-c"><div class="why-v">500+</div><div class="why-l" data-i18n="wy_2l">Events</div><div class="why-t" data-i18n="wy_2t">Startups to enterprises. We read any room.</div></div>
+<div class="why-c"><div class="why-v">INT</div><div class="why-l" data-i18n="wy_3l">Bilingual</div><div class="why-t" data-i18n="wy_3t">English and Russian. Multinational ready.</div></div>
+<div class="why-c"><div class="why-v">∞</div><div class="why-l" data-i18n="wy_4l">Custom</div><div class="why-t" data-i18n="wy_4t">No two sessions alike.</div></div>
+</div>
+</div>
+</section>
+
+<!-- PROCESS -->
+<section class="sec">
+<div class="ctn">
+<div class="si sr" data-i18n="proc_idx">Process</div>
+<h2 class="sh sr sd1"><span data-i18n="proc_h1">How it </span><span style="color:var(--vio)" data-i18n="proc_h2">works</span></h2>
+<div class="proc sr sd2">
+<div class="proc-s"><div class="proc-n">01</div><div class="proc-t" data-i18n="pr_1t">Discovery call</div><div class="proc-d" data-i18n="pr_1d">Team, goals, preferences.</div></div>
+<div class="proc-s"><div class="proc-n">02</div><div class="proc-t" data-i18n="pr_2t">Design</div><div class="proc-d" data-i18n="pr_2d">Game, scenario, dates.</div></div>
+<div class="proc-s"><div class="proc-n">03</div><div class="proc-t" data-i18n="pr_3t">Preparation</div><div class="proc-d" data-i18n="pr_3d">Materials, tech, dry-run.</div></div>
+<div class="proc-s"><div class="proc-n">04</div><div class="proc-t" data-i18n="pr_4t">Game day</div><div class="proc-d" data-i18n="pr_4d">Pro host. Debrief. HR report.</div></div>
+</div>
+</div>
+</section>
+
+<!-- FAQ -->
+<section class="sec" id="faq">
+<div class="ctn">
+<div class="si sr" data-i18n="faq_idx">FAQ</div>
+<h2 class="sh sr sd1"><span data-i18n="faq_h1">Common </span><span style="color:var(--cyan)" data-i18n="faq_h2">questions</span></h2>
+<div class="faq-list sr sd2">
+<div class="faq-i"><button class="faq-q"><span data-i18n="fq_1q">Do participants need to install anything?</span><span class="ico">+</span></button><div class="faq-a"><p data-i18n="fq_1a">No. Browser + link is all you need.</p></div></div>
+<div class="faq-i"><button class="faq-q"><span data-i18n="fq_2q">How far in advance to book?</span><span class="ico">+</span></button><div class="faq-a"><p data-i18n="fq_2a">5–7 business days recommended.</p></div></div>
+<div class="faq-i"><button class="faq-q"><span data-i18n="fq_3q">Can we reschedule?</span><span class="ico">+</span></button><div class="faq-a"><p data-i18n="fq_3a">Free rescheduling with 3+ days notice.</p></div></div>
+<div class="faq-i"><button class="faq-q"><span data-i18n="fq_4q">What's needed for offline?</span><span class="ico">+</span></button><div class="faq-a"><p data-i18n="fq_4a">Just a room. We bring everything.</p></div></div>
+<div class="faq-i"><button class="faq-q"><span data-i18n="fq_5q">Multilingual teams?</span><span class="ico">+</span></button><div class="faq-a"><p data-i18n="fq_5a">English, Russian, or mixed.</p></div></div>
+</div>
+</div>
+</section>
+
+<!-- CONTACT -->
+<section class="ct-sec" id="contact">
+<div class="ctn">
+<div class="si sr" data-i18n="ct_idx">Get started</div>
+<h2 class="sh sr sd1"><span data-i18n="ct_h1">Let's </span><span style="color:var(--mag)" data-i18n="ct_h2">build something</span></h2>
+<p class="ss sr sd2" data-i18n="ct_desc">Tell us about your team. Fast response, clear quote.</p>
+<div class="ct-split sr sd3">
+<div class="c-links">
+<a href="https://t.me/naummasha" class="c-lnk" target="_blank" rel="noopener"><div><h4>Telegram</h4><p>@naummasha</p></div><span class="arr">→</span></a>
+<a href="https://t.me/naummasha" class="c-lnk" target="_blank" rel="noopener"><div><h4 data-i18n="ct_dm">Direct message</h4><p data-i18n="ct_dm_d">Reply within hours</p></div><span class="arr">→</span></a>
+</div>
+<form class="c-form" id="ctForm">
+<div class="fr"><div class="fg"><label data-i18n="f_name">Your name</label><input type="text" data-i18n-ph="f_name_ph" placeholder="Name" required></div><div class="fg"><label data-i18n="f_company">Company</label><input type="text" data-i18n-ph="f_company_ph" placeholder="Company name"></div></div>
+<div class="fg"><label data-i18n="f_tg">Telegram or phone</label><input type="text" data-i18n-ph="f_tg_ph" placeholder="@handle or +1..." required></div>
+<div class="fr"><div class="fg"><label data-i18n="f_fmt">Format</label><select><option data-i18n="f_fmt_ch">Choose</option><option data-i18n="calc_fmt_on">Online</option><option data-i18n="calc_fmt_off">Offline</option><option data-i18n="f_fmt_ns">Not sure</option></select></div><div class="fg"><label data-i18n="f_size">Team size</label><input type="text" data-i18n-ph="f_size_ph" placeholder="Approx."></div></div>
+<div class="fg"><label data-i18n="f_game">Game</label><select><option data-i18n="f_g_help">Help me choose</option><option data-i18n="f_g_mo">Mafia — online</option><option data-i18n="f_g_mf">Mafia — offline</option><option data-i18n="f_g_mt">Mafia — tournament</option><option data-i18n="f_g_cc">Cosmic Colonizers</option><option data-i18n="f_g_cu">Custom game</option></select></div>
+<div class="fg"><label data-i18n="f_extra">Anything else</label><textarea data-i18n-ph="f_extra_ph" placeholder="Goals..."></textarea></div>
+<button type="submit" class="btn-sub" data-i18n="f_submit">Send request →</button>
+<p style="font-family:var(--mono);font-size:.52rem;letter-spacing:.08em;color:var(--text-d);margin-top:.6rem;line-height:1.6" data-i18n="f_tg_note">Messages are delivered directly to our Telegram bot @tbilissimocorpbot · Сообщения поступают прямо в наш Telegram-бот @tbilissimocorpbot</p>
+</form>
+</div>
+</div>
+</section>
+</main>
+
+<footer><div class="ctn"><div class="f-inner">
+<div><div class="f-logo">SoftSkillsGames</div><div class="f-copy" data-i18n="f_copy">© 2026 · Premium team-building games</div></div>
+<nav class="f-nav"><a href="#mafia" data-i18n="nav_mafia">Mafia</a><a href="#cosmic" data-i18n="nav_cosmic">Cosmic Colonizers</a><a href="#calc" data-i18n="nav_calc">Calculator</a><a href="#faq">FAQ</a><a href="https://t.me/naummasha" target="_blank">Telegram</a></nav>
+</div></div></footer>
+
+<script>
+(function(){
+'use strict';
+var T={en:{nav_mafia:'Mafia',nav_cosmic:'Cosmic Colonizers',nav_calc:'Calculator',nav_custom:'Customize',nav_cta:'Get in touch',hero_tag:'Premium Team Building',hero_h1_1:'Games that forge',hero_h1_2:'unstoppable teams',hero_desc:'Mafia: social deduction, psychology, bluff. Cosmic Colonizers: strategy, survival, crisis management. Two games, one result \u2014 a team that truly works together.',hero_cta:'Book a session',hero_cta2:'Explore games',m_years:'Years of craft',m_events:'Events delivered',m_players:'Players per session',trust_label:'Trusted by leading teams',mafia_badge:'Psychology \xb7 Bluff \xb7 Deduction',mafia_h1:'The art of ',mafia_h2:'Mafia',mafia_desc:'The ultimate social deduction game. Read people, build alliances, expose liars. Up to 60 players with a professional host.',mf_c1h:'Professional Host',mf_c1p:'Game masters controlling pacing, tension, and energy.',mf_c2h:'Tailored Scenarios',mf_c2p:'Difficulty adapted to your team size and goals.',mf_c3h:'Debrief & Highlights',mf_c3p:'Post-game analysis, key moments, awards.',mf_f1h:'Online via Discord',mf_f1p:'Distributed teams. Full tech support.',mf_f2h:'Offline with Props',mf_f2p:'On-site host with cards, equipment, decor.',mf_f3h:'Bilingual: RU & EN',mf_f3p:'English or Russian for multinational teams.',mf_e1h:'Branded Materials',mf_e1p:'Custom cards and assets in your style.',mf_e2h:'Tournament Mode',mf_e2p:'Leaderboards and final showdown.',mf_e3h:'HR Analytics',mf_e3p:'Report on leadership and team dynamics.',mt_players:'12\u201360 players',mt_hours:'1.5\u20133 hours',mt_tables:'Parallel tables',mt_props:'Props included',story_q:'\u201cThe best team-building doesn\u2019t feel like team-building. It feels like a story you survived together.\u201d',story_a:'\u2014 The philosophy behind every session',cosmic_badge:'Strategy \xb7 Survival \xb7 Cooperation',cosmic_h1:'Meet ',cosmic_h2:'Cosmic Colonizers',cosmic_desc:'Earth is dying. Your team is humanity\u2019s last expedition. Build a colony, manage resources, survive catastrophes, and construct the Space Press.',cc_b1h:'Colony Construction',cc_b1p:'Erect buildings, develop infrastructure, expand your outpost.',cc_b2h:'Resource Management',cc_b2p:'Balance energy, food, and metal under deficit pressure.',cc_b3h:'Risk & Crisis',cc_b3p:'React to cataclysms, epidemics, and mutinies in real time.',cc_b4h:'Trade & Strategy',cc_b4p:'Exchange resources, plan development, outmaneuver rivals.',cc_f1h:'Why it works',cc_f1a:'Real leadership under pressure',cc_f1b:'Cross-team communication tested',cc_f1c:'Accountability for every decision',cc_f1d:'Fresh social dynamics emerge',cc_f2h:'What you get',cc_f2a:'HR analytics report post-game',cc_f2b:'Unforgettable shared experience',cc_f2c:'8\u201330 players, 1.5\u20134 hours',cc_f2d:'Online or offline, RU & EN',calc_idx:'Pricing',calc_h1:'Cost ',calc_h2:'calculator',calc_desc:'Select a game, format, and number of players for an instant estimate.',calc_game_l:'Game',calc_game_m:'Mafia',calc_game_c:'Cosmic Colonizers',calc_format_l:'Format',calc_fmt_on:'Online',calc_fmt_off:'Offline',calc_players_l:'Number of players',calc_tables:'tables',calc_per_table:'per table',calc_per_player:'per player',cust_idx:'Customization',cust_h1:'Tailored to ',cust_h2:'your brand',cust_desc:'We adapt visuals, roles, narrative, and mechanics to your identity.',cu_1h:'Visual Identity',cu_1p:'Cards and presentations in your brand colors.',cu_2h:'Roles & Characters',cu_2p:'Roles mirror your org structure.',cu_3h:'Narrative Arc',cu_3p:'Scenarios around your business reality.',cu_4h:'HR Integration',cu_4p:'Embed trust, leadership, decision-making goals.',cu_5h:'Branded Deliverables',cu_5p:'Everything carries your logo.',cu_6h:'Tournament Mode',cu_6p:'Leaderboards and final showdown.',why_idx:'Why us',why_h1:'Built on ',why_h2:'experience',wy_1l:'Years',wy_1t:'Since 2013. Formats refined to perfection.',wy_2l:'Events',wy_2t:'Startups to enterprises.',wy_3l:'Bilingual',wy_3t:'English and Russian.',wy_4l:'Custom',wy_4t:'No two sessions alike.',proc_idx:'Process',proc_h1:'How it ',proc_h2:'works',pr_1t:'Discovery call',pr_1d:'Team, goals, preferences.',pr_2t:'Design',pr_2d:'Game, scenario, dates.',pr_3t:'Preparation',pr_3d:'Materials, tech, dry-run.',pr_4t:'Game day',pr_4d:'Pro host. Debrief. HR report.',faq_idx:'FAQ',faq_h1:'Common ',faq_h2:'questions',fq_1q:'Do participants need to install anything?',fq_1a:'No. Browser + link is all you need.',fq_2q:'How far in advance to book?',fq_2a:'5\u20137 business days recommended.',fq_3q:'Can we reschedule?',fq_3a:'Free rescheduling with 3+ days notice.',fq_4q:'What\u2019s needed for offline?',fq_4a:'Just a room. We bring everything.',fq_5q:'Multilingual teams?',fq_5a:'English, Russian, or mixed.',ct_idx:'Get started',ct_h1:'Let\u2019s ',ct_h2:'build something',ct_desc:'Tell us about your team. Fast response, clear quote.',ct_dm:'Direct message',ct_dm_d:'Reply within hours',f_name:'Your name',f_name_ph:'Name',f_company:'Company',f_company_ph:'Company name',f_tg:'Telegram or phone',f_tg_ph:'@handle or +1...',f_fmt:'Format',f_fmt_ch:'Choose',f_fmt_ns:'Not sure',f_size:'Team size',f_size_ph:'Approx.',f_game:'Game',f_g_help:'Help me choose',f_g_mo:'Mafia \u2014 online',f_g_mf:'Mafia \u2014 offline',f_g_mt:'Mafia \u2014 tournament',f_g_cc:'Cosmic Colonizers',f_g_cu:'Custom game',f_extra:'Anything else',f_extra_ph:'Goals...',f_submit:'Send request \u2192',f_copy:'\xa9 2026 \xb7 Premium team-building games',form_sent:'Request sent \u2713',form_sent_sub:'We\u2019ll be in touch shortly.',maf_moments_idx:'Real sessions',maf_moments_h:'What happens at the table',maf_moments_d:'Every game is different. Every game leaves a mark.',maf_m1h:'The unmasking',maf_m1p:'A VP of Engineering got voted out in round two — turned out he was the best liar in the room. The team had never seen that side of him.',maf_m2h:'Trust rebuilt',maf_m2p:'After a difficult merger, two departments sat at one table. By the final round, they were defending each other. The HR lead called it a turning point.',maf_m3h:'The quiet leader',maf_m3p:'She barely spoke in meetings. In Mafia, she read the room perfectly and steered 40 people to victory. Her manager noticed — and things changed.',calc_offline_note:'Offline \xd72 applied',calc_online_note:'Online rate',f_tg_note:'Messages are delivered directly to our Telegram bot @tbilissimocorpbot'},
+ru:{nav_mafia:'\u041c\u0430\u0444\u0438\u044f',nav_cosmic:'\u041a\u043e\u0441\u043c\u0438\u0447\u0435\u0441\u043a\u0438\u0435 \u043a\u043e\u043b\u043e\u043d\u0438\u0437\u0430\u0442\u043e\u0440\u044b',nav_calc:'\u041a\u0430\u043b\u044c\u043a\u0443\u043b\u044f\u0442\u043e\u0440',nav_custom:'\u041a\u0430\u0441\u0442\u043e\u043c\u0438\u0437\u0430\u0446\u0438\u044f',nav_cta:'\u0421\u0432\u044f\u0437\u0430\u0442\u044c\u0441\u044f',hero_tag:'\u041a\u043e\u0440\u043f\u043e\u0440\u0430\u0442\u0438\u0432\u043d\u044b\u0439 \u0442\u0438\u043c\u0431\u0438\u043b\u0434\u0438\u043d\u0433',hero_h1_1:'\u0418\u0433\u0440\u044b, \u043a\u043e\u0442\u043e\u0440\u044b\u0435 \u0441\u043e\u0437\u0434\u0430\u044e\u0442',hero_h1_2:'\u043d\u0435\u043f\u043e\u0431\u0435\u0434\u0438\u043c\u044b\u0435 \u043a\u043e\u043c\u0430\u043d\u0434\u044b',hero_desc:'\u041c\u0430\u0444\u0438\u044f: \u0441\u043e\u0446\u0438\u0430\u043b\u044c\u043d\u0430\u044f \u0434\u0435\u0434\u0443\u043a\u0446\u0438\u044f, \u043f\u0441\u0438\u0445\u043e\u043b\u043e\u0433\u0438\u044f, \u0431\u043b\u0435\u0444. \u041a\u043e\u0441\u043c\u0438\u0447\u0435\u0441\u043a\u0438\u0435 \u043a\u043e\u043b\u043e\u043d\u0438\u0437\u0430\u0442\u043e\u0440\u044b: \u0441\u0442\u0440\u0430\u0442\u0435\u0433\u0438\u044f, \u0432\u044b\u0436\u0438\u0432\u0430\u043d\u0438\u0435, \u0443\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u0435 \u043a\u0440\u0438\u0437\u0438\u0441\u043e\u043c. \u0414\u0432\u0435 \u0438\u0433\u0440\u044b, \u043e\u0434\u0438\u043d \u0440\u0435\u0437\u0443\u043b\u044c\u0442\u0430\u0442.',hero_cta:'\u0417\u0430\u043a\u0430\u0437\u0430\u0442\u044c \u0438\u0433\u0440\u0443',hero_cta2:'\u0421\u043c\u043e\u0442\u0440\u0435\u0442\u044c \u0444\u043e\u0440\u043c\u0430\u0442\u044b',m_years:'\u041b\u0435\u0442 \u043e\u043f\u044b\u0442\u0430',m_events:'\u041c\u0435\u0440\u043e\u043f\u0440\u0438\u044f\u0442\u0438\u0439',m_players:'\u0418\u0433\u0440\u043e\u043a\u043e\u0432 \u0437\u0430 \u0440\u0430\u0437',trust_label:'\u041d\u0430\u043c \u0434\u043e\u0432\u0435\u0440\u044f\u044e\u0442',mafia_badge:'\u041f\u0441\u0438\u0445\u043e\u043b\u043e\u0433\u0438\u044f \xb7 \u0411\u043b\u0435\u0444 \xb7 \u0414\u0435\u0434\u0443\u043a\u0446\u0438\u044f',mafia_h1:'\u0418\u0441\u043a\u0443\u0441\u0441\u0442\u0432\u043e ',mafia_h2:'\u041c\u0430\u0444\u0438\u0438',mafia_desc:'\u041b\u0443\u0447\u0448\u0430\u044f \u0441\u043e\u0446\u0438\u0430\u043b\u044c\u043d\u0430\u044f \u0438\u0433\u0440\u0430 \u043d\u0430 \u0434\u0435\u0434\u0443\u043a\u0446\u0438\u044e. \u0427\u0438\u0442\u0430\u0439\u0442\u0435 \u043b\u044e\u0434\u0435\u0439, \u0441\u0442\u0440\u043e\u0439\u0442\u0435 \u0430\u043b\u044c\u044f\u043d\u0441\u044b, \u0440\u0430\u0437\u043e\u0431\u043b\u0430\u0447\u0430\u0439\u0442\u0435 \u043b\u0436\u0435\u0446\u043e\u0432. \u0414\u043e 60 \u0438\u0433\u0440\u043e\u043a\u043e\u0432 \u0441 \u043f\u0440\u043e\u0444\u0435\u0441\u0441\u0438\u043e\u043d\u0430\u043b\u044c\u043d\u044b\u043c \u0432\u0435\u0434\u0443\u0449\u0438\u043c.',mf_c1h:'\u041f\u0440\u043e\u0444\u0435\u0441\u0441\u0438\u043e\u043d\u0430\u043b\u044c\u043d\u044b\u0439 \u0432\u0435\u0434\u0443\u0449\u0438\u0439',mf_c1p:'\u041e\u043f\u044b\u0442\u043d\u044b\u0435 \u0438\u0433\u0440\u043e\u043c\u0430\u0441\u0442\u0435\u0440\u0430, \u0443\u043f\u0440\u0430\u0432\u043b\u044f\u044e\u0449\u0438\u0435 \u0442\u0435\u043c\u043f\u043e\u043c \u0438 \u044d\u043d\u0435\u0440\u0433\u0438\u0435\u0439.',mf_c2h:'\u0410\u0434\u0430\u043f\u0442\u0438\u0432\u043d\u044b\u0435 \u0441\u0446\u0435\u043d\u0430\u0440\u0438\u0438',mf_c2p:'\u0421\u043b\u043e\u0436\u043d\u043e\u0441\u0442\u044c \u043f\u043e\u0434 \u0440\u0430\u0437\u043c\u0435\u0440 \u043a\u043e\u043c\u0430\u043d\u0434\u044b \u0438 \u0446\u0435\u043b\u0438.',mf_c3h:'\u0420\u0430\u0437\u0431\u043e\u0440 \u0438 \u043d\u0430\u0433\u0440\u0430\u0436\u0434\u0435\u043d\u0438\u0435',mf_c3p:'\u0410\u043d\u0430\u043b\u0438\u0437, \u043a\u043b\u044e\u0447\u0435\u0432\u044b\u0435 \u043c\u043e\u043c\u0435\u043d\u0442\u044b, \u043d\u0430\u0433\u0440\u0430\u0434\u044b.',mf_f1h:'\u041e\u043d\u043b\u0430\u0439\u043d \u0447\u0435\u0440\u0435\u0437 Discord',mf_f1p:'\u0420\u0430\u0441\u043f\u0440\u0435\u0434\u0435\u043b\u0451\u043d\u043d\u044b\u0435 \u043a\u043e\u043c\u0430\u043d\u0434\u044b. \u0422\u0435\u0445\u043f\u043e\u0434\u0434\u0435\u0440\u0436\u043a\u0430.',mf_f2h:'\u041e\u0444\u0444\u043b\u0430\u0439\u043d \u0441 \u0440\u0435\u043a\u0432\u0438\u0437\u0438\u0442\u043e\u043c',mf_f2p:'\u0412\u0435\u0434\u0443\u0449\u0438\u0439 \u043f\u0440\u0438\u0435\u0437\u0436\u0430\u0435\u0442 \u0441\u043e \u0432\u0441\u0435\u043c. \u041d\u0443\u0436\u043d\u043e \u0442\u043e\u043b\u044c\u043a\u043e \u043f\u043e\u043c\u0435\u0449\u0435\u043d\u0438\u0435.',mf_f3h:'\u0414\u0432\u0443\u044f\u0437\u044b\u0447\u043d\u044b\u0439 \u0444\u043e\u0440\u043c\u0430\u0442',mf_f3p:'\u0421\u0435\u0441\u0441\u0438\u0438 \u043d\u0430 EN \u0438\u043b\u0438 RU \u0434\u043b\u044f \u043c\u0443\u043b\u044c\u0442\u0438\u043d\u0430\u0446\u0438\u043e\u043d\u0430\u043b\u044c\u043d\u044b\u0445 \u043a\u043e\u043c\u0430\u043d\u0434.',mf_e1h:'\u0411\u0440\u0435\u043d\u0434\u0438\u0440\u043e\u0432\u0430\u043d\u043d\u044b\u0435 \u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u044b',mf_e1p:'\u041a\u0430\u0440\u0442\u043e\u0447\u043a\u0438, \u0441\u0435\u0440\u0442\u0438\u0444\u0438\u043a\u0430\u0442\u044b \u0432 \u0441\u0442\u0438\u043b\u0435 \u043a\u043e\u043c\u043f\u0430\u043d\u0438\u0438.',mf_e2h:'\u0422\u0443\u0440\u043d\u0438\u0440\u043d\u044b\u0439 \u0444\u043e\u0440\u043c\u0430\u0442',mf_e2p:'\u041c\u043d\u043e\u0433\u043e\u0440\u0430\u0443\u043d\u0434\u043e\u0432\u044b\u0439 \u0444\u043e\u0440\u043c\u0430\u0442 \u0441 \u0442\u0430\u0431\u043b\u0438\u0446\u0435\u0439 \u043b\u0438\u0434\u0435\u0440\u043e\u0432.',mf_e3h:'HR-\u0430\u043d\u0430\u043b\u0438\u0442\u0438\u043a\u0430',mf_e3p:'\u041e\u0442\u0447\u0451\u0442 \u043e \u043b\u0438\u0434\u0435\u0440\u0441\u0442\u0432\u0435 \u0438 \u0434\u0438\u043d\u0430\u043c\u0438\u043a\u0435 \u043a\u043e\u043c\u0430\u043d\u0434\u044b.',mt_players:'12\u201360 \u0438\u0433\u0440\u043e\u043a\u043e\u0432',mt_hours:'1,5\u20133 \u0447\u0430\u0441\u0430',mt_tables:'\u041f\u0430\u0440\u0430\u043b\u043b\u0435\u043b\u044c\u043d\u044b\u0435 \u0441\u0442\u043e\u043b\u044b',mt_props:'\u0420\u0435\u043a\u0432\u0438\u0437\u0438\u0442 \u0432\u043a\u043b\u044e\u0447\u0451\u043d',story_q:'\xab\u041b\u0443\u0447\u0448\u0438\u0439 \u0442\u0438\u043c\u0431\u0438\u043b\u0434\u0438\u043d\u0433 \u043d\u0435 \u043e\u0449\u0443\u0449\u0430\u0435\u0442\u0441\u044f \u043a\u0430\u043a \u0442\u0438\u043c\u0431\u0438\u043b\u0434\u0438\u043d\u0433. \u041e\u043d \u043e\u0449\u0443\u0449\u0430\u0435\u0442\u0441\u044f \u043a\u0430\u043a \u0438\u0441\u0442\u043e\u0440\u0438\u044f, \u043a\u043e\u0442\u043e\u0440\u0443\u044e \u0432\u044b \u043f\u0435\u0440\u0435\u0436\u0438\u043b\u0438 \u0432\u043c\u0435\u0441\u0442\u0435.\xbb',story_a:'\u2014 \u0424\u0438\u043b\u043e\u0441\u043e\u0444\u0438\u044f \u043a\u0430\u0436\u0434\u043e\u0439 \u0441\u0435\u0441\u0441\u0438\u0438',cosmic_badge:'\u0421\u0442\u0440\u0430\u0442\u0435\u0433\u0438\u044f \xb7 \u0412\u044b\u0436\u0438\u0432\u0430\u043d\u0438\u0435 \xb7 \u041a\u043e\u043e\u043f\u0435\u0440\u0430\u0446\u0438\u044f',cosmic_h1:'\u0417\u043d\u0430\u043a\u043e\u043c\u044c\u0442\u0435\u0441\u044c: ',cosmic_h2:'\u041a\u043e\u0441\u043c\u0438\u0447\u0435\u0441\u043a\u0438\u0435 \u043a\u043e\u043b\u043e\u043d\u0438\u0437\u0430\u0442\u043e\u0440\u044b',cosmic_desc:'\u0417\u0435\u043c\u043b\u044f \u0443\u043c\u0438\u0440\u0430\u0435\u0442. \u0412\u0430\u0448\u0430 \u043a\u043e\u043c\u0430\u043d\u0434\u0430 \u2014 \u043f\u043e\u0441\u043b\u0435\u0434\u043d\u044f\u044f \u044d\u043a\u0441\u043f\u0435\u0434\u0438\u0446\u0438\u044f. \u0421\u0442\u0440\u043e\u0439\u0442\u0435 \u043a\u043e\u043b\u043e\u043d\u0438\u044e, \u0443\u043f\u0440\u0430\u0432\u043b\u044f\u0439\u0442\u0435 \u0440\u0435\u0441\u0443\u0440\u0441\u0430\u043c\u0438, \u043f\u0435\u0440\u0435\u0436\u0438\u0432\u0430\u0439\u0442\u0435 \u043a\u0430\u0442\u0430\u043a\u043b\u0438\u0437\u043c\u044b \u0438 \u043f\u043e\u0441\u0442\u0440\u043e\u0439\u0442\u0435 \u041f\u0440\u043e\u0441\u0442\u0440\u0430\u043d\u0441\u0442\u0432\u0435\u043d\u043d\u044b\u0439 \u041f\u0440\u0435\u0441\u0441.',cc_b1h:'\u0421\u0442\u0440\u043e\u0438\u0442\u0435\u043b\u044c\u0441\u0442\u0432\u043e \u043a\u043e\u043b\u043e\u043d\u0438\u0438',cc_b1p:'\u0412\u043e\u0437\u0432\u043e\u0434\u0438\u0442\u0435 \u0437\u0434\u0430\u043d\u0438\u044f, \u0440\u0430\u0437\u0432\u0438\u0432\u0430\u0439\u0442\u0435 \u0438\u043d\u0444\u0440\u0430\u0441\u0442\u0440\u0443\u043a\u0442\u0443\u0440\u0443.',cc_b2h:'\u0423\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u0435 \u0440\u0435\u0441\u0443\u0440\u0441\u0430\u043c\u0438',cc_b2p:'\u0411\u0430\u043b\u0430\u043d\u0441\u0438\u0440\u0443\u0439\u0442\u0435 \u044d\u043d\u0435\u0440\u0433\u0438\u044e, \u0435\u0434\u0443 \u0438 \u043c\u0435\u0442\u0430\u043b\u043b \u0432 \u0434\u0435\u0444\u0438\u0446\u0438\u0442\u0435.',cc_b3h:'\u0420\u0438\u0441\u043a \u0438 \u043a\u0440\u0438\u0437\u0438\u0441\u044b',cc_b3p:'\u041a\u0430\u0442\u0430\u043a\u043b\u0438\u0437\u043c\u044b, \u044d\u043f\u0438\u0434\u0435\u043c\u0438\u0438, \u0431\u0443\u043d\u0442\u044b \u0432 \u0440\u0435\u0430\u043b\u044c\u043d\u043e\u043c \u0432\u0440\u0435\u043c\u0435\u043d\u0438.',cc_b4h:'\u0422\u043e\u0440\u0433\u043e\u0432\u043b\u044f \u0438 \u0441\u0442\u0440\u0430\u0442\u0435\u0433\u0438\u044f',cc_b4p:'\u041e\u0431\u043c\u0435\u043d \u0440\u0435\u0441\u0443\u0440\u0441\u0430\u043c\u0438, \u043f\u043b\u0430\u043d\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435, \u043a\u043e\u043d\u043a\u0443\u0440\u0435\u043d\u0446\u0438\u044f.',cc_f1h:'\u041f\u043e\u0447\u0435\u043c\u0443 \u044d\u0442\u043e \u0440\u0430\u0431\u043e\u0442\u0430\u0435\u0442',cc_f1a:'\u041b\u0438\u0434\u0435\u0440\u0441\u0442\u0432\u043e \u043f\u043e\u0434 \u0434\u0430\u0432\u043b\u0435\u043d\u0438\u0435\u043c',cc_f1b:'\u041f\u0440\u043e\u0432\u0435\u0440\u043a\u0430 \u043a\u043e\u043c\u043c\u0443\u043d\u0438\u043a\u0430\u0446\u0438\u0438',cc_f1c:'\u041e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0435\u043d\u043d\u043e\u0441\u0442\u044c \u0437\u0430 \u0440\u0435\u0448\u0435\u043d\u0438\u044f',cc_f1d:'\u041d\u043e\u0432\u044b\u0435 \u0441\u043e\u0446\u0438\u0430\u043b\u044c\u043d\u044b\u0435 \u0434\u0438\u043d\u0430\u043c\u0438\u043a\u0438',cc_f2h:'\u0427\u0442\u043e \u0432\u044b \u043f\u043e\u043b\u0443\u0447\u0430\u0435\u0442\u0435',cc_f2a:'HR-\u0430\u043d\u0430\u043b\u0438\u0442\u0438\u043a\u0430 \u043f\u043e\u0441\u043b\u0435 \u0438\u0433\u0440\u044b',cc_f2b:'\u041d\u0435\u0437\u0430\u0431\u044b\u0432\u0430\u0435\u043c\u044b\u0439 \u043e\u043f\u044b\u0442',cc_f2c:'8\u201330 \u0438\u0433\u0440\u043e\u043a\u043e\u0432, 1,5\u20134 \u0447\u0430\u0441\u0430',cc_f2d:'\u041e\u043d\u043b\u0430\u0439\u043d \u0438\u043b\u0438 \u043e\u0444\u0444\u043b\u0430\u0439\u043d',calc_idx:'\u0421\u0442\u043e\u0438\u043c\u043e\u0441\u0442\u044c',calc_h1:'\u041a\u0430\u043b\u044c\u043a\u0443\u043b\u044f\u0442\u043e\u0440 ',calc_h2:'\u0446\u0435\u043d',calc_desc:'\u0412\u044b\u0431\u0435\u0440\u0438\u0442\u0435 \u0438\u0433\u0440\u0443, \u0444\u043e\u0440\u043c\u0430\u0442 \u0438 \u043a\u043e\u043b-\u0432\u043e \u0438\u0433\u0440\u043e\u043a\u043e\u0432 \u2014 \u043c\u0433\u043d\u043e\u0432\u0435\u043d\u043d\u044b\u0439 \u0440\u0430\u0441\u0447\u0451\u0442.',calc_game_l:'\u0418\u0433\u0440\u0430',calc_game_m:'\u041c\u0430\u0444\u0438\u044f',calc_game_c:'\u041a\u043e\u0441\u043c\u0438\u0447\u0435\u0441\u043a\u0438\u0435 \u043a\u043e\u043b\u043e\u043d\u0438\u0437\u0430\u0442\u043e\u0440\u044b',calc_format_l:'\u0424\u043e\u0440\u043c\u0430\u0442',calc_fmt_on:'\u041e\u043d\u043b\u0430\u0439\u043d',calc_fmt_off:'\u041e\u0444\u0444\u043b\u0430\u0439\u043d',calc_players_l:'\u041a\u043e\u043b\u0438\u0447\u0435\u0441\u0442\u0432\u043e \u0438\u0433\u0440\u043e\u043a\u043e\u0432',calc_tables:'\u0441\u0442\u043e\u043b\u043e\u0432',calc_per_table:'\u0437\u0430 \u0441\u0442\u043e\u043b',calc_per_player:'\u0437\u0430 \u0438\u0433\u0440\u043e\u043a\u0430',cust_idx:'\u041a\u0430\u0441\u0442\u043e\u043c\u0438\u0437\u0430\u0446\u0438\u044f',cust_h1:'\u041f\u043e\u0434 ',cust_h2:'\u0432\u0430\u0448 \u0431\u0440\u0435\u043d\u0434',cust_desc:'\u0410\u0434\u0430\u043f\u0442\u0438\u0440\u0443\u0435\u043c \u0432\u0438\u0437\u0443\u0430\u043b, \u0440\u043e\u043b\u0438, \u043d\u0430\u0440\u0440\u0430\u0442\u0438\u0432 \u0438 \u043c\u0435\u0445\u0430\u043d\u0438\u043a\u0438 \u043f\u043e\u0434 \u0432\u0430\u0441.',cu_1h:'\u0412\u0438\u0437\u0443\u0430\u043b\u044c\u043d\u044b\u0439 \u0441\u0442\u0438\u043b\u044c',cu_1p:'\u041a\u0430\u0440\u0442\u043e\u0447\u043a\u0438 \u0438 \u043f\u0440\u0435\u0437\u0435\u043d\u0442\u0430\u0446\u0438\u0438 \u0432 \u0432\u0430\u0448\u0438\u0445 \u0446\u0432\u0435\u0442\u0430\u0445.',cu_2h:'\u0420\u043e\u043b\u0438 \u0438 \u043f\u0435\u0440\u0441\u043e\u043d\u0430\u0436\u0438',cu_2p:'\u0420\u043e\u043b\u0438 \u043e\u0442\u0440\u0430\u0436\u0430\u044e\u0442 \u0441\u0442\u0440\u0443\u043a\u0442\u0443\u0440\u0443 \u043a\u043e\u043c\u043f\u0430\u043d\u0438\u0438.',cu_3h:'\u0421\u044e\u0436\u0435\u0442\u043d\u0430\u044f \u043b\u0438\u043d\u0438\u044f',cu_3p:'\u0421\u0446\u0435\u043d\u0430\u0440\u0438\u0438 \u0432\u043e\u043a\u0440\u0443\u0433 \u0432\u0430\u0448\u0435\u0439 \u0440\u0435\u0430\u043b\u044c\u043d\u043e\u0441\u0442\u0438.',cu_4h:'HR-\u0438\u043d\u0442\u0435\u0433\u0440\u0430\u0446\u0438\u044f',cu_4p:'\u0414\u043e\u0432\u0435\u0440\u0438\u0435, \u043b\u0438\u0434\u0435\u0440\u0441\u0442\u0432\u043e, \u043f\u0440\u0438\u043d\u044f\u0442\u0438\u0435 \u0440\u0435\u0448\u0435\u043d\u0438\u0439.',cu_5h:'\u0411\u0440\u0435\u043d\u0434\u0438\u0440\u043e\u0432\u0430\u043d\u043d\u044b\u0435 \u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u044b',cu_5p:'\u0412\u0441\u0451 \u0441 \u0432\u0430\u0448\u0438\u043c \u043b\u043e\u0433\u043e.',cu_6h:'\u0422\u0443\u0440\u043d\u0438\u0440\u043d\u044b\u0439 \u0440\u0435\u0436\u0438\u043c',cu_6p:'\u0422\u0430\u0431\u043b\u0438\u0446\u0430 \u043b\u0438\u0434\u0435\u0440\u043e\u0432 \u0438 \u0444\u0438\u043d\u0430\u043b.',why_idx:'\u041e \u043d\u0430\u0441',why_h1:'\u041e\u0441\u043d\u043e\u0432\u0430\u043d\u043e \u043d\u0430 ',why_h2:'\u043e\u043f\u044b\u0442\u0435',wy_1l:'\u041b\u0435\u0442',wy_1t:'\u0421 2013 \u0433\u043e\u0434\u0430. \u0424\u043e\u0440\u043c\u0430\u0442\u044b \u0434\u043e\u0432\u0435\u0434\u0435\u043d\u044b \u0434\u043e \u0438\u0434\u0435\u0430\u043b\u0430.',wy_2l:'\u041c\u0435\u0440\u043e\u043f\u0440\u0438\u044f\u0442\u0438\u0439',wy_2t:'\u041e\u0442 \u0441\u0442\u0430\u0440\u0442\u0430\u043f\u043e\u0432 \u0434\u043e \u043a\u043e\u0440\u043f\u043e\u0440\u0430\u0446\u0438\u0439.',wy_3l:'\u0414\u0432\u0443\u044f\u0437\u044b\u0447\u043d\u044b\u0439',wy_3t:'\u0410\u043d\u0433\u043b\u0438\u0439\u0441\u043a\u0438\u0439 \u0438 \u0440\u0443\u0441\u0441\u043a\u0438\u0439.',wy_4l:'\u041a\u0430\u0441\u0442\u043e\u043c',wy_4t:'\u041a\u0430\u0436\u0434\u0430\u044f \u0438\u0433\u0440\u0430 \u0443\u043d\u0438\u043a\u0430\u043b\u044c\u043d\u0430.',proc_idx:'\u041f\u0440\u043e\u0446\u0435\u0441\u0441',proc_h1:'\u041a\u0430\u043a \u044d\u0442\u043e ',proc_h2:'\u0440\u0430\u0431\u043e\u0442\u0430\u0435\u0442',pr_1t:'\u041e\u0431\u0441\u0443\u0436\u0434\u0430\u0435\u043c',pr_1d:'\u041a\u043e\u043c\u0430\u043d\u0434\u0430, \u0446\u0435\u043b\u0438, \u043f\u0440\u0435\u0434\u043f\u043e\u0447\u0442\u0435\u043d\u0438\u044f.',pr_2t:'\u0414\u0438\u0437\u0430\u0439\u043d',pr_2d:'\u0418\u0433\u0440\u0430, \u0441\u0446\u0435\u043d\u0430\u0440\u0438\u0439, \u0434\u0430\u0442\u044b.',pr_3t:'\u041f\u043e\u0434\u0433\u043e\u0442\u043e\u0432\u043a\u0430',pr_3d:'\u041c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u044b, \u0442\u0435\u0445\u0441\u0435\u0442\u0430\u043f, \u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0430.',pr_4t:'\u0418\u0433\u0440\u0430',pr_4d:'\u0412\u0435\u0434\u0443\u0449\u0438\u0439. \u0420\u0430\u0437\u0431\u043e\u0440. \u041e\u0442\u0447\u0451\u0442.',faq_idx:'FAQ',faq_h1:'\u0427\u0430\u0441\u0442\u044b\u0435 ',faq_h2:'\u0432\u043e\u043f\u0440\u043e\u0441\u044b',fq_1q:'\u041d\u0443\u0436\u043d\u043e \u043b\u0438 \u0447\u0442\u043e-\u0442\u043e \u0443\u0441\u0442\u0430\u043d\u0430\u0432\u043b\u0438\u0432\u0430\u0442\u044c?',fq_1a:'\u041d\u0435\u0442. \u0411\u0440\u0430\u0443\u0437\u0435\u0440 + \u0441\u0441\u044b\u043b\u043a\u0430.',fq_2q:'\u0417\u0430 \u0441\u043a\u043e\u043b\u044c\u043a\u043e \u0431\u0440\u043e\u043d\u0438\u0440\u043e\u0432\u0430\u0442\u044c?',fq_2a:'5\u20137 \u0440\u0430\u0431\u043e\u0447\u0438\u0445 \u0434\u043d\u0435\u0439.',fq_3q:'\u041c\u043e\u0436\u043d\u043e \u043f\u0435\u0440\u0435\u043d\u0435\u0441\u0442\u0438?',fq_3a:'\u0414\u0430. \u0411\u0435\u0441\u043f\u043b\u0430\u0442\u043d\u043e \u043f\u0440\u0438 3+ \u0434\u043d\u044f\u0445.',fq_4q:'\u0427\u0442\u043e \u043d\u0443\u0436\u043d\u043e \u0434\u043b\u044f \u043e\u0444\u0444\u043b\u0430\u0439\u043d?',fq_4a:'\u0422\u043e\u043b\u044c\u043a\u043e \u043f\u043e\u043c\u0435\u0449\u0435\u043d\u0438\u0435. \u0420\u0435\u043a\u0432\u0438\u0437\u0438\u0442 \u043d\u0430\u0448.',fq_5q:'\u041c\u0443\u043b\u044c\u0442\u0438\u044f\u0437\u044b\u0447\u043d\u044b\u0435 \u043a\u043e\u043c\u0430\u043d\u0434\u044b?',fq_5a:'EN, RU \u0438\u043b\u0438 \u043c\u0438\u043a\u0441.',ct_idx:'\u0421\u0432\u044f\u0437\u0430\u0442\u044c\u0441\u044f',ct_h1:'\u0414\u0430\u0432\u0430\u0439\u0442\u0435 ',ct_h2:'\u043d\u0430\u0447\u043d\u0451\u043c',ct_desc:'\u0420\u0430\u0441\u0441\u043a\u0430\u0436\u0438\u0442\u0435 \u043e \u043a\u043e\u043c\u0430\u043d\u0434\u0435. \u0411\u044b\u0441\u0442\u0440\u044b\u0439 \u043e\u0442\u0432\u0435\u0442, \u0447\u0451\u0442\u043a\u0430\u044f \u0446\u0435\u043d\u0430.',ct_dm:'\u041d\u0430\u043f\u0438\u0441\u0430\u0442\u044c',ct_dm_d:'\u041e\u0442\u0432\u0435\u0442\u0438\u043c \u0437\u0430 \u043f\u0430\u0440\u0443 \u0447\u0430\u0441\u043e\u0432',f_name:'\u0418\u043c\u044f',f_name_ph:'\u0412\u0430\u0448\u0435 \u0438\u043c\u044f',f_company:'\u041a\u043e\u043c\u043f\u0430\u043d\u0438\u044f',f_company_ph:'\u041d\u0430\u0437\u0432\u0430\u043d\u0438\u0435',f_tg:'Telegram / \u0442\u0435\u043b\u0435\u0444\u043e\u043d',f_tg_ph:'@username \u0438\u043b\u0438 +7...',f_fmt:'\u0424\u043e\u0440\u043c\u0430\u0442',f_fmt_ch:'\u0412\u044b\u0431\u0440\u0430\u0442\u044c',f_fmt_ns:'\u041d\u0435 \u0440\u0435\u0448\u0438\u043b\u0438',f_size:'\u041a\u043e\u043b-\u0432\u043e',f_size_ph:'\u041f\u0440\u0438\u043c\u0435\u0440\u043d\u043e',f_game:'\u0418\u0433\u0440\u0430',f_g_help:'\u041f\u043e\u043c\u043e\u0433\u0438\u0442\u0435 \u0432\u044b\u0431\u0440\u0430\u0442\u044c',f_g_mo:'\u041c\u0430\u0444\u0438\u044f \u2014 \u043e\u043d\u043b\u0430\u0439\u043d',f_g_mf:'\u041c\u0430\u0444\u0438\u044f \u2014 \u043e\u0444\u0444\u043b\u0430\u0439\u043d',f_g_mt:'\u041c\u0430\u0444\u0438\u044f \u2014 \u0442\u0443\u0440\u043d\u0438\u0440',f_g_cc:'\u041a\u043e\u0441\u043c\u0438\u0447\u0435\u0441\u043a\u0438\u0435 \u043a\u043e\u043b\u043e\u043d\u0438\u0437\u0430\u0442\u043e\u0440\u044b',f_g_cu:'\u041a\u0430\u0441\u0442\u043e\u043c\u043d\u0430\u044f \u0438\u0433\u0440\u0430',f_extra:'\u0414\u043e\u043f\u043e\u043b\u043d\u0438\u0442\u0435\u043b\u044c\u043d\u043e',f_extra_ph:'\u0420\u0430\u0441\u0441\u043a\u0430\u0436\u0438\u0442\u0435 \u043e \u0437\u0430\u0434\u0430\u0447\u0435...',f_submit:'\u041e\u0442\u043f\u0440\u0430\u0432\u0438\u0442\u044c \u0437\u0430\u044f\u0432\u043a\u0443 \u2192',f_copy:'\xa9 2026 \xb7 \u041a\u043e\u0440\u043f\u043e\u0440\u0430\u0442\u0438\u0432\u043d\u044b\u0435 \u0438\u0433\u0440\u044b',form_sent:'\u0417\u0430\u044f\u0432\u043a\u0430 \u043e\u0442\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0430 \u2713',form_sent_sub:'\u0421\u0432\u044f\u0436\u0435\u043c\u0441\u044f \u0432 \u0431\u043b\u0438\u0436\u0430\u0439\u0448\u0435\u0435 \u0432\u0440\u0435\u043c\u044f.',maf_moments_idx:'\u0420\u0435\u0430\u043b\u044c\u043d\u044b\u0435 \u0441\u0435\u0441\u0441\u0438\u0438',maf_moments_h:'\u0427\u0442\u043e \u043f\u0440\u043e\u0438\u0441\u0445\u043e\u0434\u0438\u0442 \u0437\u0430 \u0441\u0442\u043e\u043b\u043e\u043c',maf_moments_d:'\u041a\u0430\u0436\u0434\u0430\u044f \u0438\u0433\u0440\u0430 \u0443\u043d\u0438\u043a\u0430\u043b\u044c\u043d\u0430. \u041a\u0430\u0436\u0434\u0430\u044f \u043e\u0441\u0442\u0430\u0432\u043b\u044f\u0435\u0442 \u0441\u043b\u0435\u0434.',maf_m1h:'\u0420\u0430\u0437\u043e\u0431\u043b\u0430\u0447\u0435\u043d\u0438\u0435',maf_m1p:'\u0412\u0438\u0446\u0435-\u043f\u0440\u0435\u0437\u0438\u0434\u0435\u043d\u0442\u0430 \u0432\u044b\u0433\u043d\u0430\u043b\u0438 \u0443\u0436\u0435 \u0432 \u043f\u0435\u0440\u0432\u043e\u043c \u0440\u0430\u0443\u043d\u0434\u0435. \u041e\u043a\u0430\u0437\u0430\u043b\u043e\u0441\u044c, \u043e\u043d \u043b\u0443\u0447\u0448\u0435 \u0432\u0441\u0435\u0445 \u0432\u0440\u0430\u043b. \u041a\u043e\u043c\u0430\u043d\u0434\u0430 \u043d\u0438\u043a\u043e\u0433\u0434\u0430 \u044d\u0442\u043e\u0433\u043e \u043d\u0435 \u0437\u043d\u0430\u043b\u0430.',maf_m2h:'\u0414\u043e\u0432\u0435\u0440\u0438\u0435 \u0432\u043e\u0441\u0441\u0442\u0430\u043d\u043e\u0432\u043b\u0435\u043d\u0430',maf_m2p:'\u041f\u043e\u0441\u043b\u0435 \u0441\u043b\u043e\u0436\u043d\u043e\u0433\u043e \u043e\u0431\u044a\u0435\u0434\u0438\u043d\u0435\u043d\u0438\u044f \u0434\u0432\u0430 \u043e\u0442\u0434\u0435\u043b\u0430 \u0441\u0435\u043b\u0438 \u0437\u0430 \u043e\u0434\u0438\u043d \u0441\u0442\u043e\u043b. \u041a \u0444\u0438\u043d\u0430\u043b\u0443 \u0437\u0430\u0449\u0438\u0449\u0430\u043b\u0438 \u0434\u0440\u0443\u0433 \u0434\u0440\u0443\u0433\u0430. HR \u043d\u0430\u0437\u0432\u0430\u043b\u0430 \u044d\u0442\u043e \u043f\u0435\u0440\u0435\u043b\u043e\u043c\u043d\u044b\u043c \u043c\u043e\u043c\u0435\u043d\u0442\u043e\u043c.',maf_m3h:'\u0422\u0438\u0445\u0438\u0439 \u043b\u0438\u0434\u0435\u0440',maf_m3p:'\u041e\u043d\u0430 \u043c\u043e\u043b\u0447\u0430\u043b\u0430 \u043d\u0430 \u0441\u043e\u0432\u0435\u0449\u0430\u043d\u0438\u044f\u0445. \u0412 \u041c\u0430\u0444\u0438\u0438 \u043e\u043d\u0430 \u0447\u0438\u0442\u0430\u043b\u0430 \u043a\u043e\u043c\u043d\u0430\u0442\u0443 \u0438 \u043f\u0440\u0438\u0432\u0435\u043b\u0430 40 \u0438\u0433\u0440\u043e\u043a\u043e\u0432 \u043a \u043f\u043e\u0431\u0435\u0434\u0435. \u0420\u0443\u043a\u043e\u0432\u043e\u0434\u0438\u0442\u0435\u043b\u044c \u0437\u0430\u043c\u0435\u0442\u0438\u043b. \u041a\u043e\u0435-\u0447\u0442\u043e \u0438\u0437\u043c\u0435\u043d\u0438\u043b\u043e\u0441\u044c.',calc_offline_note:'\u041e\u0444\u0444\u043b\u0430\u0439\u043d \xd72',calc_online_note:'\u041e\u043d\u043b\u0430\u0439\u043d',f_tg_note:'\u0421\u043e\u043e\u0431\u0449\u0435\u043d\u0438\u044f \u043f\u043e\u0441\u0442\u0443\u043f\u0430\u044e\u0442 \u043f\u0440\u044f\u043c\u043e \u0432 \u043d\u0430\u0448 Telegram-\u0431\u043e\u0442 @tbilissimocorpbot'}};
+
+var lang=localStorage.getItem('ssg_lang')||'en';
+function applyLang(l){lang=l;localStorage.setItem('ssg_lang',l);document.documentElement.lang=l;document.querySelectorAll('.lang-b').forEach(function(b){b.classList.toggle('active',b.dataset.lang===l)});var d=T[l];document.querySelectorAll('[data-i18n]').forEach(function(el){var k=el.dataset.i18n;if(d[k]!==undefined)el.textContent=d[k]});document.querySelectorAll('[data-i18n-ph]').forEach(function(el){var k=el.dataset.i18nPh;if(d[k]!==undefined)el.placeholder=d[k]});updateCalc()}
+document.querySelectorAll('.lang-b').forEach(function(b){b.addEventListener('click',function(){applyLang(b.dataset.lang)})});
+
+/* Stars */
+var sf=document.getElementById('sf');for(var i=0;i<90;i++){var s=document.createElement('div');s.className='star';var sz=Math.random()*2+.4;s.style.cssText='width:'+sz+'px;height:'+sz+'px;top:'+Math.random()*100+'%;left:'+Math.random()*100+'%;--d:'+(Math.random()*3+2)+'s;opacity:'+(Math.random()*.45+.15);sf.appendChild(s)}
+
+/* Hero entrance */
+setTimeout(function(){document.querySelectorAll('[data-ha]').forEach(function(el,i){setTimeout(function(){el.style.transition='opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1)';el.style.opacity='1';el.style.transform='translateY(0)'},200+i*150)})},300);
+
+/* Counters */
+var cDone=false;function animC(){document.querySelectorAll('[data-count]').forEach(function(el){var t=+el.dataset.count,c=0,s=Math.ceil(t/40);var iv=setInterval(function(){c+=s;if(c>=t){c=t;clearInterval(iv)}el.textContent=c+'+'},28)})}
+
+/* Scroll engine */
+var prog=document.getElementById('prog'),hdr=document.getElementById('hdr'),heroCt=document.getElementById('heroCt'),pL=document.querySelectorAll('[data-pd]');
+var tick=false;
+function onScroll(){if(tick)return;tick=true;requestAnimationFrame(function(){var sY=window.scrollY,dH=document.documentElement.scrollHeight-window.innerHeight;prog.style.width=(dH>0?(sY/dH)*100:0)+'%';hdr.classList.toggle('scrolled',sY>60);pL.forEach(function(l){l.style.transform='translate3d(0,'+(-(sY*parseFloat(l.dataset.pd)))+'px,0)'});if(heroCt){var p=Math.min(sY/600,1);heroCt.style.opacity=1-p*.65;heroCt.style.transform='translateY('+sY*.12+'px) scale('+(1-p*.04)+')'}tick=false})}
+window.addEventListener('scroll',onScroll,{passive:true});onScroll();
+
+/* Scroll reveal */
+var srO=new IntersectionObserver(function(e){e.forEach(function(en){if(en.isIntersecting)en.target.classList.add('vis')})},{threshold:.08,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.sr').forEach(function(el){srO.observe(el)});
+var cO=new IntersectionObserver(function(e){e.forEach(function(en){if(en.isIntersecting&&!cDone){cDone=true;animC()}})},{threshold:.3});
+var hm=document.querySelector('.hero-metrics');if(hm)cO.observe(hm);
+
+/* 3D tilt */
+document.querySelectorAll('[data-tilt]').forEach(function(c){c.addEventListener('mousemove',function(e){var r=c.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;c.style.transform='perspective(600px) rotateY('+x*7+'deg) rotateX('+(-y*7)+'deg) translateY(-5px)'});c.addEventListener('mouseleave',function(){c.style.transform=''})});
+
+/* Mafia tab phases — dot clicks only, no sticky scroll */
+var phases=document.querySelectorAll('.m-phase'),dots=document.querySelectorAll('.m-dot'),curP=0;
+function setP(idx){if(idx===curP)return;curP=idx;phases.forEach(function(p,i){p.classList.toggle('active',i===idx)});dots.forEach(function(d,i){d.classList.toggle('active',i===idx)})}
+dots.forEach(function(d){d.addEventListener('click',function(){setP(+d.dataset.idx)})});
+
+/* Mobile */
+var mobBtn=document.getElementById('mobBtn');mobBtn.addEventListener('click',function(){hdr.classList.toggle('mob-open');mobBtn.textContent=hdr.classList.contains('mob-open')?'\u2715':'\u2630'});
+document.querySelectorAll('.nav-mid a').forEach(function(a){a.addEventListener('click',function(){hdr.classList.remove('mob-open');mobBtn.textContent='\u2630'})});
+
+/* FAQ */
+document.querySelectorAll('.faq-q').forEach(function(b){b.addEventListener('click',function(){var it=b.parentElement,w=it.classList.contains('open');document.querySelectorAll('.faq-i').forEach(function(i){i.classList.remove('open')});if(!w)it.classList.add('open')})});
+
+/* Calculator */
+var calcGame=document.getElementById('calcGame'),calcFmt=document.getElementById('calcFmt'),calcSlider=document.getElementById('calcSlider'),calcNum=document.getElementById('calcNum'),calcTotal=document.getElementById('calcTotal'),calcDetail=document.getElementById('calcDetail');
+
+// Mafia: stepped per-table price, never below $75 (from 4+ tables / 48+ players)
+function mafiaBasePrice(p){
+  if(p<1)return{tables:0,perTable:0,total:0};
+  var tables=Math.ceil(p/12);
+  var perTable;
+  if(tables>=4)perTable=75;
+  else if(tables===3)perTable=80;
+  else if(tables===2)perTable=90;
+  else perTable=100;
+  return{tables:tables,perTable:perTable,total:tables*perTable};
+}
+// Cosmic: $20/player online, $30/player offline (NOT x2)
+function cosmicBasePrice(p){return{total:p*20,perPlayer:20};}
+
+function updateCalc(){
+  var game=calcGame.value,players=+calcSlider.value,fmt=calcFmt.value,d=T[lang],isM=game==='mafia';
+  var isOffline=fmt==='offline';
+  calcNum.className='calc-pn '+(isM?'clr-m':'clr-c');
+  calcTotal.className='calc-total '+(isM?'clr-m':'clr-c');
+  calcSlider.className='calc-slider '+(isM?'th-m':'th-c');
+  calcNum.textContent=players;
+  if(isM){
+    var r=mafiaBasePrice(players);
+    var mult=isOffline?2:1;
+    var totalFinal=r.total*mult;
+    var perTableFinal=r.perTable*mult;
+    calcTotal.textContent='$'+totalFinal;
+    var fmtLabel=isOffline?(d.calc_offline_note||'Offline ×2'):(d.calc_online_note||'Online');
+    calcDetail.innerHTML='<strong>'+r.tables+' '+(d.calc_tables||'tables')+'</strong> \xd7 $'+perTableFinal+' '+(d.calc_per_table||'per table')+'<br><span style="font-size:.75rem;color:var(--text-d)">'+fmtLabel+'</span>';
+  } else {
+    var ppFinal=isOffline?30:20;
+    var totalFinal2=players*ppFinal;
+    calcTotal.textContent='$'+totalFinal2;
+    var fmtLabel2=isOffline?(d.calc_offline_note||'Offline'):(d.calc_online_note||'Online');
+    calcDetail.innerHTML='<strong>'+players+'</strong> \xd7 $'+ppFinal+' '+(d.calc_per_player||'per player')+'<br><span style="font-size:.75rem;color:var(--text-d)">'+fmtLabel2+'</span>';
+  }
+}
+calcGame.addEventListener('change',updateCalc);calcFmt.addEventListener('change',updateCalc);calcSlider.addEventListener('input',updateCalc);
+
+/* Contact form — sends to backend which forwards to Telegram bot @tbilissimocorpbot */
+/**
+ * sendFormToTelegram(formData)
+ * Sends form fields as JSON to /api/contact-to-telegram (POST).
+ * The backend must use Telegram Bot API to forward the message to @tbilissimocorpbot.
+ * Do NOT put the Telegram bot token in this frontend file.
+ */
+async function sendFormToTelegram(formData){
+  // POST to server-side endpoint — add token + forward logic there
+  const resp=await fetch('/api/contact-to-telegram',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(formData)});
+  if(!resp.ok)throw new Error('Server error: '+resp.status);
+  return resp.json();
+}
+
+document.getElementById('ctForm').addEventListener('submit',function(e){
+  e.preventDefault();
+  var d=T[lang],f=this;
+  var inputs=f.querySelectorAll('input,select,textarea');
+  var formData={};
+  inputs.forEach(function(el){if(el.name||el.placeholder)formData[el.placeholder||el.name||'field']=el.value;});
+  f.style.opacity='.4';f.style.pointerEvents='none';
+  sendFormToTelegram(formData)
+    .catch(function(){/* silently ignore network errors in demo mode */})
+    .finally(function(){
+      setTimeout(function(){
+        f.innerHTML='<div style="text-align:center;padding:2rem;font-family:var(--dsp);font-size:1.3rem;font-weight:600">'+d.form_sent+'<br><span style="font-size:.82rem;font-weight:300;color:var(--text-m);margin-top:.3rem;display:block">'+d.form_sent_sub+'</span></div>';
+        f.style.opacity='1';f.style.pointerEvents='auto';
+      },800);
+    });
+});
+
+/* Smooth scroll */
+document.querySelectorAll('a[href^="#"]').forEach(function(a){a.addEventListener('click',function(e){e.preventDefault();var t=document.querySelector(this.getAttribute('href'));if(t)t.scrollIntoView({behavior:'smooth',block:'start'})})});
+
+/* Init */
+applyLang(lang);updateCalc();
+})();
+</script>
+</body></html>
